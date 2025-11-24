@@ -12,7 +12,7 @@ router.get('/courses', authMiddleware.verifyToken, authMiddleware.authorizeRole(
 router.put('/codeCourse', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.codeCourse);
 router.get('/students/:ClassSection_id', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherStudents);
 router.get('/periods', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), rectorControllers.Period_List);
-router.get('/subjects/:ClassSection_id', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherSubject);
+router.get('/subjects', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherSubject);
 router.post('/addGrade', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherAddNotes);
 
 // ===================== Exportaciones =====================

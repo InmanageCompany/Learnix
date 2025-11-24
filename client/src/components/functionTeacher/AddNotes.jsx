@@ -10,7 +10,7 @@ function AddNotes() {
   const [selectedPeriods, setSelectedPeriods] = useState({});
   const [notes, setNotes] = useState({});
   
-  const [comment, SetComentario] = useState("");
+  const [comment, SetComentario] = useState({});
   const [conceptual, SetConceptual] = useState(["En proceso", "Suficiente", "Avanzado"]);
   const token = localStorage.getItem("token")
 
@@ -142,7 +142,10 @@ function AddNotes() {
                     )}
                   </th>
                   <th>
-                    <input type="text" placeholder="Comentario" onChange={(e) => SetComentario(e.target.value)} />
+                    <input type="text" placeholder="Comentario" onChange={(e) => SetComentario({
+                      ...comment,
+                      [item.id]: e.target.value
+                    })} />
                   </th>
                   <th>
                   <Button onClick={() => Grades(item.id)} variant="contained"> Agregar </Button>

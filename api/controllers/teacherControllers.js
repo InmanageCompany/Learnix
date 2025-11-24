@@ -112,18 +112,15 @@ const codeCourse = async (req, res) => {
 
 // Obtener materias de un profesor
 const teacherSubject = async (req, res) => {
-    const { ClassSection_id } = req.params;
-
     try {
         const subjects = await ClassSubject.findAll({
-            where: { class_section_id: ClassSection_id },
             include: [
                 { model: Subject, as: 'subject' }
             ]
         });
 
         if (!subjects)
-            return res.status(400).json('No hay sectiones de materia registrado');
+            return res.status(400).json('No hay secciones de materia registrado');
 
         res.json(subjects)
     } catch (err) {
