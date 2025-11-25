@@ -11,6 +11,9 @@ import LoginStudent from './components/loginPages/loginStudent'
 import Footer from './components/footerPages/footer'
 import Register from './components/register'
 import Profile from './components/profile'
+import SeeAlumns from './components/functionTeacher/SeeAlumns'
+import AddNotes from './components/functionTeacher/AddNotes'
+
 
 function App() {
   return (
@@ -26,6 +29,8 @@ function App() {
           <Route path='/homeRector' element={<HomeRector />}></Route>
           <Route path='/homeStudent' element={<HomeStudent />}></Route>
           <Route path='/profile' element={<Profile />}></Route>
+          <Route path='/seeAlumns/:ClassSection_id' element={<SeeAlumns />}></Route>
+          <Route path='/addNotes' element={<AddNotes />}></Route>
           <Route path='*' element={<div><h1>404 Not found</h1></div>}></Route>
         </Routes>
       </main>

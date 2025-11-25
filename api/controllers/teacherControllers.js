@@ -1,6 +1,6 @@
 // ===================== Importaciones =====================
-const { where } = require('sequelize');
-const { Role, User, Course, ClassSection, Subject, ClassSubject, StudentClass, Year } = require('../models');
+const { where, Op } = require('sequelize');
+const { Role, User, Course, ClassSection, Subject, ClassSubject, StudentClass, Year, ReportCard, Grade, Period } = require('../models');
 const bcrypt = require('bcrypt');
 
 // ===================== Controladores =====================
@@ -110,55 +110,89 @@ const codeCourse = async (req, res) => {
     }
 };
 
-// // Obtener materias de un profesor
-// const teacherSubject = async (req, res) => {
-//     const { ClassSection_id } = req.params;
+// Obtener materias de un profesor
+const teacherSubject = async (req, res) => {
+    try {
+        const subjects = await ClassSubject.findAll({
+            include: [
+                { model: Subject, as: 'subject' }
+            ]
+        });
 
-//     try {
-//         const subjects = await ClassSubject.findAll({
-//             where: { class_section_id: ClassSection_id },
-//             include: [
-//                 { model: Subject, as: 'subject' }
-//             ]
-//         });
+        if (!subjects)
+            return res.status(400).json('No hay secciones de materia registrado');
 
-//         if (!subjects)
-//             return res.status(400).json('No hay sectiones de materia registrado');
+        res.json(subjects)
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
+    }
+};
 
-//         if (subjects.length > 1) return res.status(300).json(subjects);
+// Obtener materias de un profesor
+const teacherAddNotes = async (req, res) => {
+    const { subject_id, grade_value, comment, user_id, period } = req.body ?? {};
+    
 
-//         res.status(417).json(subjects)
-//     } catch (err) {
-//         console.error(err);
-//         return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
-//     }
-// };
+    try {
+        const periodC = await Period.findOne({where: {name: period}})
 
-// // Obtener alumnos de la seccion de un profesor
-// const teacherStudents = async (req, res) => {
-//     const { ClassSection_id } = req.params;
+        if (!periodC)
+            return res.status(400).json('No hay ningun bimestre');
 
-//     try {
-//         const Students = await StudentClass.findAll({
-//             where: { class_sections_id: ClassSection_id },
-//             include: [
-//                 { model: User, as: 'student' }
-//             ]
-//         });
+        const report = await ReportCard.findOne({
+            where: {
+                student_id: user_id,
+                period_id: periodC.id
+            }
+        });
 
-//         if (!Students)
-//             return res.status(400).json('No hay estudiantes en la seccion registrados');
+        if (!report)
+            return res.status(400).json('No hay ningun boletin relacionado al estudiante');
 
-//         res.status(417).json(Students)
-//     } catch (err) {
-//         console.error(err);
-//         return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
-//     }
-// };
+        await Grade.create({
+            subject_id,
+            report_card_id: report.id,
+            grade_value,
+            comment
+        })
+
+        res.status(201).json({ message: `Nota agregada correctamente correctamente`});
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
+    }
+};
+
+// Obtener alumnos de la seccion de un profesor
+const teacherStudents = async (req, res) => {
+    const { ClassSection_id } = req.params;
+
+    try {
+
+        const Students = await StudentClass.findAll({
+            where: { class_sections_id: ClassSection_id },
+            include: [
+                { model: User, as: 'student' }
+            ]
+        });
+
+        if (!Students)
+            return res.status(400).json('No hay estudiantes en la seccion registrados');
+
+        res.json(Students)
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
+    }
+};
 
 // ===================== Exportaciones =====================
 module.exports = {
     registerTeacher,
     teacherCourses,
-    codeCourse
+    codeCourse,
+    teacherStudents,
+    teacherSubject,
+    teacherAddNotes
 };
