@@ -14,6 +14,8 @@ router.get('/students/:ClassSection_id', authMiddleware.verifyToken, authMiddlew
 router.get('/periods', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), rectorControllers.Period_List);
 router.get('/subjects', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherSubject);
 router.post('/addGrade', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherAddNotes);
+router.get('/seeGrade/:student_id/:subject_id/:period_id', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherSeeGrade);
+router.put('/updateGrade', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherUpdateGrade);
 
 // ===================== Exportaciones =====================
 module.exports = router;

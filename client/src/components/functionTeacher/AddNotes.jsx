@@ -46,7 +46,7 @@ function AddNotes() {
         user_id,
         grade_value: notes[user_id],
         period: selectedPeriods[user_id],
-        comment,
+        comment: comment[user_id],
         subject_id
       },
         {
