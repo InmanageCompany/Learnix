@@ -29,22 +29,21 @@ const studentNotes = async (req, res) => {
 
 // Obtener boletines de un estudiante
 const studentReports = async (req, res) => {
-    const { student_id } = req.params;
+    const id = req.user.id;
 
     try {
-
-        const report = await ReportCard.findAll({
-            where: { student_id: student_id },
+        const reports = await ReportCard.findAll({
+            where: { student_id: id },
             include: [
                 { model: Period, as: 'period' } 
             ]
         });
 
-        if (!report) {
+        if (!reports) {
             return res.status(404).json({ message: 'No se encontro ninguna nota en el boletin' });
         }
 
-        res.json(report);
+        res.json(reports);
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
