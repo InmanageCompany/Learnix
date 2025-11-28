@@ -1,0 +1,7 @@
+.course-item {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: white;
+  box-shadow: var(--shadow-soft);
+}

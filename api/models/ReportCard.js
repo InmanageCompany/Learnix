@@ -9,6 +9,10 @@ const ReportCard = sequelize.define('ReportCard', {
     period_id: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    school_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 }, {
     timestamps: false,

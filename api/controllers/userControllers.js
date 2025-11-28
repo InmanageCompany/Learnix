@@ -1,5 +1,5 @@
 // ===================== Importaciones =====================
-const { User, Role } = require('../models');
+const { User, Role, School } = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { JWT_SECRET } = require('../config/jwt');
@@ -49,7 +49,7 @@ const login = async (req, res) => {
             if (!(await bcrypt.compare(password, user.password)))
                 return res.status(401).json({ message: 'Contraseña incorrecta' });
 
-            const token = jwt.sign({ id: user.id, role: user.role?.name }, JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ id: user.id, role: user.role?.name }, JWT_SECRET);
 
             return res.json({ token, role: user.role?.name });
         }
@@ -71,7 +71,7 @@ const infoUser = async (req, res, next) => {
         if (!user)
             return res.status(404).json({ message: 'Usuario no encontrado' });
 
-        req.result = user.toJSON();;
+        req.result = user.toJSON();
 
         //res.json(user);
         next();
@@ -139,9 +139,26 @@ const updateUser = async (req, res, next) => {
     }
 };
 
+// Obtener todas las escuelas
+const getSchools = async (req, res) => {
+    try {
+        const schools = await School.findAll({
+            attributes: ["id", "name"]
+        });
+
+        res.json(schools);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error interno del servidor" });
+    }
+};
+
+module.exports = { getSchools };
+
 // ===================== Exportaciones =====================
 module.exports = {
     login,
     infoUser,
-    updateUser
+    updateUser,
+    getSchools
 }

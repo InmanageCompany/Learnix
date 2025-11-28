@@ -16,6 +16,7 @@ const Action = require('./Action');
 const Permission = require('./Permission');
 const RolePermission = require('./RolePermission');
 const Binnacle = require('./Binnacle');
+const School = require('./School');
 
 // ==================== Relaciones ====================
 
@@ -77,6 +78,34 @@ RolePermission.belongsTo(Permission, { foreignKey: 'permission_id', as: 'permiss
 Role.belongsToMany(Permission, { through: RolePermission, as: 'permissions', foreignKey: 'role_id' });
 Permission.belongsToMany(Role, { through: RolePermission, as: 'roles', foreignKey: 'permission_id' });
 
+// School y Users
+School.hasMany(User, { foreignKey: 'school_id', as: 'users' });
+User.belongsTo(School, { foreignKey: 'school_id', as: 'school' });
+
+// School y Periods
+School.hasMany(Period, { foreignKey: 'school_id', as: 'periods' });
+Period.belongsTo(School, { foreignKey: 'school_id', as: 'school' });
+
+// // School y Years
+// School.hasMany(Year, { foreignKey: 'school_id', as: 'years' });
+// Year.belongsTo(School, { foreignKey: 'school_id', as: 'school' });
+
+// // School y Courses
+// School.hasMany(Course, { foreignKey: 'school_id', as: 'courses' });
+// Course.belongsTo(School, { foreignKey: 'school_id', as: 'school' });
+
+// School y ClassSections
+School.hasMany(ClassSection, { foreignKey: 'school_id', as: 'class_sections' });
+ClassSection.belongsTo(School, { foreignKey: 'school_id', as: 'school' });
+
+// // School y Subjects
+// School.hasMany(Subject, { foreignKey: 'school_id', as: 'subjects' });
+// Subject.belongsTo(School, { foreignKey: 'school_id', as: 'school' });
+
+// School y ReportCards
+School.hasMany(ReportCard, { foreignKey: 'school_id', as: 'report_cards' });
+ReportCard.belongsTo(School, { foreignKey: 'school_id', as: 'school' });
+
 // ==================== Crear objeto models ====================
 const models = {
     Role,
@@ -94,7 +123,8 @@ const models = {
     Action,
     Permission,
     RolePermission,
-    Binnacle
+    Binnacle,
+    School
 };
 
 // ==================== Exportar ====================

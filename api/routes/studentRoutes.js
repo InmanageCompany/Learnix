@@ -7,7 +7,7 @@ const studentControllers = require('../controllers/studentControllers')
 // ===================== Rutas =====================
 
 // Ruta para crear ROL
-router.get('/reports/:student_id', authMiddleware.verifyToken, authMiddleware.authorizeRole(['student']), studentControllers.studentReports);
+router.get('/reportCards', authMiddleware.verifyToken, authMiddleware.authorizeRole(['student']), studentControllers.studentReports);
 
 // Ruta para crear ROL
 router.get('/notes/:report_card_id', authMiddleware.verifyToken, authMiddleware.authorizeRole(['student']), studentControllers.studentNotes);
