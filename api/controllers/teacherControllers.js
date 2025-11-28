@@ -239,8 +239,8 @@ const teacherUpdateGrade = async (req, res) => {
         const { period_id, grade_id, grade_value, comment } = req.body;
 
         if (period_id == 2) {
-            if (isNaN(grade_value)) return res.status(400).json('La nota tiene que ser numero');
-            if (grade_value < 1 || grade_value > 10) return res.status(400).json('La nota no puede valer menos que 1 o mas que 10')
+            if (isNaN(grade_value)) return res.status(400).json({message:'La nota tiene que ser numero'});
+            if (grade_value < 1 || grade_value > 10) return res.status(400).json({message:'La nota no puede valer menos que 1 o mas que 10'})
         }
 
         const grade = await Grade.update({
@@ -252,7 +252,7 @@ const teacherUpdateGrade = async (req, res) => {
 
 
         if (grade.length === 0)
-            return res.status(400).json('No se actualizo ninguna nota');
+            return res.status(400).json({message:'No se actualizo ninguna nota'});
 
         res.json({ message: "Se actualizo la nota con exito" });
     } catch (err) {
