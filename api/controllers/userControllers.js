@@ -1,5 +1,5 @@
 // ===================== Importaciones =====================
-const { User, Role } = require('../models');
+const { User, Role, School } = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { JWT_SECRET } = require('../config/jwt');
@@ -139,9 +139,26 @@ const updateUser = async (req, res, next) => {
     }
 };
 
+// Obtener todas las escuelas
+const getSchools = async (req, res) => {
+    try {
+        const schools = await School.findAll({
+            attributes: ["id", "name"]
+        });
+
+        res.json(schools);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error interno del servidor" });
+    }
+};
+
+module.exports = { getSchools };
+
 // ===================== Exportaciones =====================
 module.exports = {
     login,
     infoUser,
-    updateUser
+    updateUser,
+    getSchools
 }
