@@ -11,13 +11,17 @@ function NavBarAdmin() {
         <Button color="inherit" component={Link} to="/admin/home" sx={{ textTransform: "none", fontWeight: 500 }}>
           Home Admin
         </Button>
-        <Button color="inherit" component={Link} to="/usersAdmin" sx={{ textTransform: "none", fontWeight: 500 }}>
+        <Button color="inherit" component={Link} to="/admin/users" sx={{ textTransform: "none", fontWeight: 500 }}>
           Users
+        </Button>
+        <Button color="inherit" component={Link} to="/admin/users" sx={{ textTransform: "none", fontWeight: 500 }}>
+          zorra
         </Button>
         <AccountCircleIcon fontSize="large" sx={{ cursor: "pointer" }} onClick={() => navigate("/profile")} />
       </Toolbar>
     </AppBar>
   );
 }
+
 
 export default NavBarAdmin;
