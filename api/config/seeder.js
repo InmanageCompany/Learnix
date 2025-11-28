@@ -1,5 +1,6 @@
 // ===================== Importaciones =====================
 const {
+    School,
     Role,
     User,
     Period,
@@ -23,6 +24,14 @@ const bcrypt = require('bcrypt');
 async function seedDatabase() {
     try {
         console.log('Iniciando carga de datos de prueba...');
+
+        // === 0. ESCUELA ===
+        const [school] = await School.findOrCreate({
+            where: { name: 'E.T.N°26 "Confederación Suiza"' },
+            defaults: {
+                address: 'Ciudad Autónoma de Buenos Aires'
+            }
+        });
 
         // === 1. ROLES ===
         const roleNames = ['admin', 'teacher', 'rector', 'student'];
@@ -84,13 +93,16 @@ async function seedDatabase() {
         const users = {};
         for (const u of usersData) {
             const { role, ...userData } = u;
+
             const [user] = await User.findOrCreate({
                 where: { email: u.email },
                 defaults: {
                     role_id: roles[role].id,
+                    school_id: school.id,
                     ...userData
                 }
             });
+
             users[role] = user;
         }
 
@@ -100,7 +112,18 @@ async function seedDatabase() {
             { name: 'Segundo Trimestre', date_init: '2025-06-01', date_end: '2025-08-31' },
             { name: 'Tercer Trimestre', date_init: '2025-09-01', date_end: '2025-11-30' }
         ];
-        for (const p of periodsData) await Period.findOrCreate({ where: { name: p.name }, defaults: p });
+
+        const periods = [];
+        for (const p of periodsData) {
+            const [period] = await Period.findOrCreate({
+                where: { name: p.name },
+                defaults: {
+                    ...p,
+                    school_id: school.id
+                }
+            });
+            periods.push(period);
+        }
 
         // === 4. MATERIAS ===
         const subjectNames = ['Matemática', 'Lengua', 'Historia', 'Ciencias Naturales', 'Educación Física'];
@@ -161,6 +184,9 @@ async function seedDatabase() {
             where: {
                 student_id: users['student'].id,
                 period_id: period.id
+            },
+            defaults: {
+                school_id: school.id
             }
         });
 

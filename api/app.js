@@ -2,6 +2,8 @@
 const express = require('express');
 const cors = require('cors');
 
+require('./triggers/periodTrigger.js');
+
 // Importar rutas
 const { BitacoraMiddleware  } = require('./middlewares/Binnacle')
 const teacherRoutes = require('./routes/teacherRoutes');
@@ -11,7 +13,7 @@ const userRoutes = require('./routes/userRoutes');
 const rectorRoutes = require('./routes/rectorRoutes');
 
 // Importar modelos y base de datos
-const { db, Role, User, Period, ReportCard, Subject, Grade, Year, Course, ClassSection, ClassSubject, StudentClass, Entity, Action, Permission, RolePermission, Binnacle } = require('./models');
+const { db, Role, User, Period, ReportCard, Subject, Grade, Year, Course, ClassSection, ClassSubject, StudentClass, Entity, Action, Permission, RolePermission, Binnacle, School } = require('./models');
 const seedDatabase = require('./config/seeder');
 
 // ===================== Configuración del servidor =====================

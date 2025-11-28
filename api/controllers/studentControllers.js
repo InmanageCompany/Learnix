@@ -8,7 +8,6 @@ const studentNotes = async (req, res) => {
     const { report_card_id } = req.params;
 
     try {
-
         const grades = await Grade.findAll({
             where: { report_card_id: report_card_id },
             include:  [
