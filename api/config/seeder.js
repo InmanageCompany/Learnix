@@ -172,14 +172,14 @@ async function seedDatabase() {
                     report_card_id: reportCard.id
                 },
                 defaults: {
-                    grade_value: Math.floor(Math.random() * 10) + 1,
+                    grade_value: "Suficiente",
                     comment: 'Desempeño satisfactorio'
                 }
             });
         }
 
         // === 12. ENTIDADES, ACCIONES, PERMISOS, ROLES ===
-        const entities = ['User', 'Grade', 'Report_card', 'Subject'];
+        const entities = ['User', 'Grade', 'Report_card', 'Subject', 'ClassSection', 'Period', 'Permission', 'Binnacle'];
         const actions = ['create', 'read', 'update', 'delete'];
 
         const entityRecords = {};

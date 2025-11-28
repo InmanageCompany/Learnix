@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoginIcon from "@mui/icons-material/Login";
-import NavBar from './navBar'
+
+import NavBar from '../NavBar/NavBar'
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -22,9 +23,9 @@ function Login() {
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
 
-      if (role === "admin") navigate("/homeAdmin");
-      else if (role === "teacher") navigate("/homeTeacher");
-      else if (role === "rector") navigate("/homeRector");
+      if (role === "admin") navigate("/admin/home");
+      else if (role === "teacher") navigate("/teacher/home");
+      else if (role === "rector") navigate("/rector/home");
       else alert("Rol no reconocido");
     } catch (error) {
       if (error.response)

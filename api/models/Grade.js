@@ -11,10 +11,11 @@ const Grade = sequelize.define('Grade', {
         allowNull: false
     },
     grade_value: {
-        type: DataTypes.INTEGER
+        type: DataTypes.STRING(255)
     },
     comment: {
-        type: DataTypes.STRING(255)
+        type: DataTypes.STRING(255),
+        allowNull: true
     }
 }, {
     timestamps: false,

@@ -71,7 +71,7 @@ const infoUser = async (req, res, next) => {
         if (!user)
             return res.status(404).json({ message: 'Usuario no encontrado' });
 
-        req.result = user.toJSON();;
+        req.result = user.toJSON();
 
         //res.json(user);
         next();

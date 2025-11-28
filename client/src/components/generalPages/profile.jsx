@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoginIcon from "@mui/icons-material/Login";
 
-import NavBarAdmin from "../adminPages/NavBarAdmin";
-import NavBarRector from "../rectorPages/navBarRector";
-import NavBarStudent from "../studentPages/navBarStudent";
-import NavBarTeacher from "../teacherPages/navBarTeacher";
 
-import LogoutButton from "./logOut";
+import NavBarAdmin from "../../Admin/NavBar/NavBar";
+import NavBarRector from "../../Rector/NavBar/NavBar";
+import NavBarStudent from "../../Student/NavBar/NavBar";
+import NavBarTeacher from "../../Teacher/NavBar/NavBar";
+
+import LogoutButton from "../LogOut/LogOut";
 
 function Profile() {
    const [name, setName] = useState("");
@@ -46,10 +47,10 @@ function Profile() {
             }
          );
 
-         if (role === "admin") navigate("/homeAdmin");
-         else if (role === "teacher") navigate("/homeTeacher");
-         else if (role === "rector") navigate("/homeRector");
-         else if (role === "student") navigate("/homeStudent");
+         if (role === "admin") navigate("/admin/home");
+         else if (role === "teacher") navigate("/teacher/home");
+         else if (role === "rector") navigate("/rector/home");
+         else if (role === "student") navigate("/student/home");
       } catch (error) {
          if (error.response)
             alert(error.response.data.message);
