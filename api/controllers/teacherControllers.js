@@ -1,20 +1,23 @@
 // ===================== Importaciones =====================
-const { where, Op } = require('sequelize');
-const { Role, User, Course, ClassSection, Subject, ClassSubject, StudentClass, Year, ReportCard, Grade, Period } = require('../models');
+const { Role, User, Course, ClassSection, Subject, ClassSubject, StudentClass, Year, ReportCard, Grade, Period, School } = require('../models');
 const bcrypt = require('bcrypt');
 
 // ===================== Controladores =====================
 
 // Registro de profesor
 const registerTeacher = async (req, res) => {
-    const { name, date_of_birth, phone, cuil, email, password } = req.body;
+    const { name, date_of_birth, phone, cuil, email, password, school_id } = req.body;
 
     try {
-        if (!name || !date_of_birth || !phone || !cuil || !email || !password)
+        if (!name || !date_of_birth || !phone || !cuil || !email || !password || !school_id)
             return res.status(400).json({ message: 'Faltan datos obligatorios' });
 
         if (isNaN(Date.parse(date_of_birth)))
             return res.status(400).json({ message: 'La fecha de nacimiento no es válida' });
+
+        const school = await School.findByPk(school_id);
+        if (!school)
+            return res.status(400).json({ message: "La escuela no existe" });
 
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser)
@@ -24,6 +27,7 @@ const registerTeacher = async (req, res) => {
 
         const newUser = await User.create({
             role_id: 2,
+            school_id,
             name,
             date_of_birth,
             phone,
@@ -141,8 +145,8 @@ const teacherAddGrades = async (req, res) => {
             return res.status(400).json('No hay ningun bimestre');
 
         if (periodC.id == 2) {
-            if (isNaN(grade_value)) return res.status(400).json({message: 'La nota tiene que ser numero'});
-            if (grade_value < 1 || grade_value > 10) return res.status(400).json({message:'La nota no puede valer menos que 1 o mas que 10'})
+            if (isNaN(grade_value)) return res.status(400).json({ message: 'La nota tiene que ser numero' });
+            if (grade_value < 1 || grade_value > 10) return res.status(400).json({ message: 'La nota no puede valer menos que 1 o mas que 10' })
         }
 
         const report = await ReportCard.findOne({
@@ -153,7 +157,7 @@ const teacherAddGrades = async (req, res) => {
         });
 
         if (!report)
-            return res.status(400).json({message: 'No hay ningun boletin relacionado al estudiante'});
+            return res.status(400).json({ message: 'No hay ningun boletin relacionado al estudiante' });
 
         const grade = await Grade.findOne({
             where: {
@@ -163,7 +167,7 @@ const teacherAddGrades = async (req, res) => {
         });
 
         if (grade)
-            return res.status(400).json({message:'Ya hay una nota cargada'});
+            return res.status(400).json({ message: 'Ya hay una nota cargada' });
 
         await Grade.create({
             subject_id,

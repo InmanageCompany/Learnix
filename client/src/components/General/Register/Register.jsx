@@ -1,5 +1,5 @@
 import Button from "@mui/material/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoginIcon from "@mui/icons-material/Login";
@@ -12,10 +12,26 @@ function Register() {
    const [cuil, setCuil] = useState("");
    const [email, setEmail] = useState("");
    const [password, setPassword] = useState("");
+   const [school_id, setSchool_id] = useState("");
+   const [schools, setSchools] = useState([]);
+
    const navigate = useNavigate();
 
+   const fetchSchools = async () => {
+      try {
+         const response = await axios.get("http://localhost:3000/api/user/schools");
+         setSchools(response.data);
+      } catch (err) {
+         alert("No se pudieron cargar las escuelas");
+      }
+   }
+
+   useEffect(() => {
+      fetchSchools()
+   }, [])
+
    const fetchRegister = async () => {
-      if (!name || !date_of_birth || !phone || !cuil || !email || !password) {
+      if (!name || !date_of_birth || !phone || !cuil || !email || !password || !school_id) {
          alert("Por favor, complete todos los campos obligatorios.");
          return;
       }
@@ -26,6 +42,7 @@ function Register() {
       try {
          const response = await axios.post("http://localhost:3000/api/teacher/register", {
             name,
+            school_id,
             date_of_birth,
             phone: cleanPhone,
             cuil: cleanCuil,
@@ -50,6 +67,12 @@ function Register() {
          <div className="login-container">
             <h1>Registro</h1>
             <input type="text" placeholder="Nombre completo" onChange={(e) => setName(e.target.value)} />
+            <select onChange={(e) => setSchool_id(e.target.value)}>
+               <option value="">Seleccione una escuela</option>
+               {schools.map(s => (
+                  <option key={s.id} value={s.id}>{s.name}</option>
+               ))}
+            </select>
             <input type="date" onChange={(e) => setDate_of_birth(e.target.value)} />
             <input type="text" placeholder="Teléfono" onChange={(e) => setPhone(e.target.value)} />
             <input type="text" placeholder="Cuil" onChange={(e) => setCuil(e.target.value)} />
@@ -62,5 +85,3 @@ function Register() {
 }
 
 export default Register;
-
-// { name, date_of_birth, phone, cuil, tuition, email, password } 

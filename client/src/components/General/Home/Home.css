@@ -1,0 +1,176 @@
+/* =========================================
+   VARIABLES (SOLO LAS QUE USA EL HOME)
+========================================= */
+:root {
+  --blue-primary: #00489A;
+  --blue-accent: #2196F3;
+  --gray-light: #f7f9fb;
+  --gray-medium: #e0e0e0;
+  --text-dark: #1f2937;
+  --text-light: #6b7280;
+  --radius: 12px;
+  --transition: 0.25s ease;
+  --shadow-soft: 0 4px 10px rgba(0, 0, 0, 0.05);
+  --font-main: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+/* =========================================
+   ESTILOS BASE NECESARIOS PARA EL HOME
+========================================= */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--gray-light);
+  color: var(--text-dark);
+  font-family: var(--font-main);
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  color: var(--blue-primary);
+  font-weight: 600;
+}
+
+a {
+  color: var(--blue-accent);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--blue-primary);
+}
+
+/* =========================================
+   HERO
+========================================= */
+.hero {
+  text-align: center;
+  padding: 6rem 1rem 4rem;
+}
+
+.hero h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+}
+
+.hero .sub {
+  margin-top: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.hero .desc {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: var(--text-light);
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* =========================================
+   TARJETAS DEL HOME
+========================================= */
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 3rem 1rem 5rem;
+}
+
+.feature-card {
+  background: #fff;
+  width: 260px;
+  padding: 2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--gray-medium);
+  box-shadow: var(--shadow-soft);
+  transition: var(--transition);
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card h3 {
+  margin-bottom: 0.6rem;
+  font-size: 1.25rem;
+  color: var(--blue-primary);
+}
+
+.feature-card p {
+  margin: 0;
+  color: var(--text-light);
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  background-color: var(--gray-medium);
+  color: var(--text-light);
+  font-size: 0.9rem;
+  margin-top: 2rem;
+}
+
+footer a {
+  color: var(--blue-primary);
+  font-weight: 500;
+}
+
+footer a:hover {
+  color: var(--blue-accent);
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .hero h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero .sub {
+    font-size: 1.2rem;
+  }
+
+  .features {
+    gap: 1.5rem;
+  }
+}
+
+/* Celular */
+@media (max-width: 600px) {
+  .hero {
+    padding: 3rem 1rem 2.5rem;
+  }
+
+  .hero h1 {
+    font-size: 1.9rem;
+  }
+
+  .hero .sub {
+    font-size: 1.1rem;
+  }
+
+  .hero .desc {
+    font-size: 1rem;
+  }
+
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .feature-card {
+    width: 90%;
+  }
+}

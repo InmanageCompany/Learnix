@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
-import './App.css'
+// import './App.css'
 
-import { Home, Login, Register, Profile, Footer } from './components/General'
+import { Home, Login, Register, Profile } from './components/General'
 
 import { HomeAdmin } from './components/Admin'
 
@@ -44,7 +44,6 @@ function App() {
           <Route path='*' element={<div><h1>404 Not found</h1></div>} />
         </Routes>
       </main>
-      <Footer />
     </>
   )
 }
