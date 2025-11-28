@@ -11,6 +11,9 @@ function NavBarStudent() {
         <Button color="inherit" component={Link} to="/student/home" sx={{ textTransform: "none", fontWeight: 500 }}>
           Home Student
         </Button>
+        <Button color="inherit" component={Link} to="/student/reportCards" sx={{ textTransform: "none", fontWeight: 500 }}>
+          Boletines
+        </Button>
         <AccountCircleIcon fontSize="large" sx={{ cursor: "pointer" }} onClick={() => navigate("/profile")} />
       </Toolbar>
     </AppBar>

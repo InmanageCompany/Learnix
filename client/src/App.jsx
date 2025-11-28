@@ -7,7 +7,7 @@ import { HomeAdmin } from './components/Admin'
 
 import { HomeRector } from './components/Rector'
 
-import { HomeStudent, LoginStudent } from './components/Student'
+import { HomeStudent, LoginStudent, ReportCards, SeeNotes } from './components/Student'
 
 import { SeeStudents, AddNotes, ModNotes, HomeTeacher } from './components/Teacher'
 
@@ -31,10 +31,12 @@ function App() {
           {/* STUDENT */}
           <Route path='/student/home' element={<HomeStudent />} />
           <Route path='/student/login' element={<LoginStudent />} />
+          <Route path='/student/reportCards' element={<ReportCards />} />
+          <Route path='/student/notes/:Report_Card_id' element={<SeeNotes />} />
 
           {/* TEACHER */}
           <Route path='/teacher/home' element={<HomeTeacher />} />
-          <Route path='/teacher/alumns/:ClassSection_id' element={<SeeStudents />} />
+          <Route path='/teacher/students/:ClassSection_id' element={<SeeStudents />} />
           <Route path='/teacher/notes/add' element={<AddNotes />} />
           <Route path='/teacher/notes/mod' element={<ModNotes />} />
 

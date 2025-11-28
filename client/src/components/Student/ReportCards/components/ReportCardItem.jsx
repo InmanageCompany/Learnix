@@ -1,16 +1,16 @@
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import './SubjectItem.css';
+import './ReportCardItem.css';
 
-function SubjectItem({ subject, course }) {
+function ReportCardItem({ reportCard }) {
   return (
     <li className="subject-item">
-      {subject.subject.name}
+      {reportCard.period.name}
 
       <Button
         component={Link}
-        to={`/teacher/students/${course.id}`}
-        state={{ subject_id: subject.subject.id }}
+        to={`/student/notes/${reportCard.id}`}
+        state={{ Report_Card_id: reportCard.id }}
         variant="contained"
         sx={{
           padding: "4px 10px",
@@ -19,10 +19,10 @@ function SubjectItem({ subject, course }) {
           backgroundColor: "#2196F3"
         }}
       >
-        Ver alumnos
+        Ver notas
       </Button>
     </li>
   );
 }
 
-export default SubjectItem;
+export default ReportCardItem;

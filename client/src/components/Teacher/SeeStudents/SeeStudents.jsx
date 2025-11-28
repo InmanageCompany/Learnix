@@ -24,6 +24,9 @@ function SeeStudents() {
         }
       );
 
+      console.log(response.data);
+      
+
       setAlumns(response.data.map(r => r.student));
     } catch (error) {
       if (error.response)
