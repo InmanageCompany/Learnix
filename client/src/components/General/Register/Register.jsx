@@ -1,4 +1,4 @@
-import Button from "@mui/material/Button";
+import { Button, TextField, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -67,12 +67,20 @@ function Register() {
          <div className="login-container">
             <h1>Registro</h1>
             <input type="text" placeholder="Nombre completo" onChange={(e) => setName(e.target.value)} />
-            <select onChange={(e) => setSchool_id(e.target.value)}>
-               <option value="">Seleccione una escuela</option>
+            <TextField
+               select
+               label="Seleccione una escuela"
+               value={school_id}
+               onChange={(e) => setSchool_id(e.target.value)}
+               sx={{ width: "100%", marginTop: 1 }}
+            >
+               <MenuItem value="">Seleccione una escuela</MenuItem>
                {schools.map(s => (
-                  <option key={s.id} value={s.id}>{s.name}</option>
+                  <MenuItem key={s.id} value={s.id}>
+                     {s.name}
+                  </MenuItem>
                ))}
-            </select>
+            </TextField>
             <input type="date" onChange={(e) => setDate_of_birth(e.target.value)} />
             <input type="text" placeholder="Teléfono" onChange={(e) => setPhone(e.target.value)} />
             <input type="text" placeholder="Cuil" onChange={(e) => setCuil(e.target.value)} />
