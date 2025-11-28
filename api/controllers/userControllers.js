@@ -86,47 +86,52 @@ const updateUser = async (req, res, next) => {
     const { name, date_of_birth, phone, cuil, tuition, email, password } = req.body;
     const changes = {};
     const verif = req.verif;
+    
     //cosas a usar
     // console.log(typeof phone[0] === 'string');
     // console.log(isNaN(Number('pepe')));
     try {
         if (name) changes.name = name;
-        if (date_of_birth) changes.date_of_birth = date_of_birth;
+        if (date_of_birth){
+            if (isNaN(Date.parse(date_of_birth)))
+            return res.status(400).json({ message: 'La fecha de nacimiento no es válida' });
+            changes.date_of_birth = date_of_birth;
+        }
         if (phone) {
-            if (phone[0] === 0) return res.json({ message: 'el numero de telefono tiene que ser un numero y no puede empezar por cero' });
+            if (isNaN(phone)) return res.status(400).json({ message: 'El numero tiene que ser numero' });
+            if (phone[0] === 0) return res.status(400).json({ message: 'el numero de telefono no puede empezar por cero' });
             changes.phone = phone;
         }
         if (cuil) {
-            if (!Number.isInteger(cuil)) return res.json({ message: 'El cuil tiene que ser un numero' });
+            if (isNaN(cuil)) return res.status(400).json({ message: 'El cuil tiene que ser un numero' });
             changes.cuil = cuil;
+            
         }
         if (tuition) {
-            if (!Number.isInteger(tuition)) return res.json({ message: 'El cuil tiene que ser un numero' });
+            if (isNaN(tuition)) return res.status(400).json({ message: 'La matricula tiene que ser un numero' });
             changes.tuition = tuition;
         }
         if (email) {
-            for (let index = 0; index < email.length; index++) {
-                const arroba = email[index];
-                if (arroba = "@") {
-                    changes.email = email;
-                }
-                else return res.json({ message: 'El gmail no es valido' });
+            if (!email.includes("@")) {
+                return res.status(400).json({ message: 'El email no es válido' });
             }
+            changes.email = email;
         }
+        
         if (password) {
             const passwordHash = await bcrypt.hash(password, 10);
             changes.password = passwordHash;
         }
 
         if (Object.keys(changes).length === 0)
-            return res.json({ message: 'Ingrese al menos un valor a modificar' });
+            return res.status(400).json({ message: 'Ingrese al menos un valor a modificar' });
 
 
          const [updated] = await User.update(changes, {
             where: { id: verif }
         });
 
-        if(updated === 0) return res.json({ message: 'No se modifico ningun ususario' })
+        if(updated === 0) return res.status(400).json({ message: 'No se modifico ningun ususario' })
 
         req.facts = changes;
         req.result = { message: 'Se actualizó el usuario correctamente' };
