@@ -1,5 +1,6 @@
 // ===================== Importaciones =====================
 const { User, Role } = require('../models');
+const Course = require('../models/Course');
 
 // ===================== Controladores =====================
 
@@ -121,6 +122,17 @@ const getUsers = async (req, res) => {
   }
 }
 
+const getCourses = async (req, res) => {
+  try{
+    const cursos = await Course.count();
+    res.json({cursos});
+  }
+  catch(err){
+    console.error(err);
+    return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
+  }
+}
+
 
 
 // ===================== Exportaciones =====================
@@ -129,5 +141,6 @@ module.exports = {
   createRole,
   roleList,
   createUser,
-  deleteUser
+  deleteUser,
+  getCourses
 }

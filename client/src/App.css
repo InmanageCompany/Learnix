@@ -196,6 +196,17 @@ button.MuiButton-contained:hover {
 /* =========================================
    PÁGINAS DE ROLES
 ========================================= */
+
+.admin-rectangle{
+  padding: 3rem;
+  text-align: center;
+  background-color: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  max-width: 900px;
+  margin: 2rem auto;
+}
+
 .admin-page,
 .teacher-page,
 .rector-page,

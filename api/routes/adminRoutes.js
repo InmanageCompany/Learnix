@@ -14,6 +14,7 @@ router.post('/createUser', authMiddleware.verifyToken, authMiddleware.authorizeR
 //router.delete('/deleteUser', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), adminControllers.deleteUser);
 router.delete('/deleteUser/:idD', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), authMiddleware.checkPermission(1,4), Binnacle.Prepare_bitacora ,adminControllers.deleteUser);
 router.get('/users', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), adminControllers.getUsers);
+router.get('/course', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), adminControllers.getCourses);
 
 // ===================== Exportaciones =====================
 module.exports = router;
