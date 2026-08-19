@@ -114,7 +114,8 @@ a:hover {
 }
 
 .feature-card {
-  background: white;
+  margin: 2rem;
+  background: rgb(245, 245, 245);
   border-radius: var(--radius);
   padding: 1.5rem;
   box-shadow: var(--shadow-soft);
