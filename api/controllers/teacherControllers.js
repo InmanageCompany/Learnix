@@ -55,6 +55,32 @@ const teacherCourses = async (req, res) => {
         return res.status(404).json({ message: "No hay id registrado" });
 
     try {
+        const classSubjects = await ClassSubject.findAll({
+            where: { teacher_id: id },
+            include: [{ 
+                model: ClassSection, 
+                as: 'class_section',
+                include: [
+                    { model: Year, as: "year", attributes: ["name"] },
+                    { model: Course, as: "course", attributes: ["name"] }
+                ]
+            }]
+        });
+        
+        console.log(classSubjects);
+
+        // Dedupe por class_section_id
+        const seen = new Set();
+        const classSections = classSubjects
+            .filter(cs => {
+                if (seen.has(cs.class_section_id)) return false;
+                seen.add(cs.class_section_id);
+                return true;
+            })
+            .map(cs => cs.class_section);
+
+        res.json(classSections);
+        /*
         const courses = await ClassSection.findAll({
             where: { teacher_id: id },
             include: [
@@ -68,6 +94,7 @@ const teacherCourses = async (req, res) => {
             return res.status(404).json('No hay cursos registrados');
 
         res.json(courses);
+        */
     } catch (err) {
         console.error(err);
         return res.status(500).json({
@@ -77,7 +104,7 @@ const teacherCourses = async (req, res) => {
     }
 };
 
-// Ingresar código de curso
+// Ingresar código de curso /
 const codeCourse = async (req, res) => {
     const id = req.user.id;
     const code = Number(req.body.code);
@@ -87,18 +114,25 @@ const codeCourse = async (req, res) => {
 
     try {
         const course = await ClassSection.findOne({
-            where: { code }
+            where: { code },
+            include: [
+                { model: Year, as: "year", attributes: ["name"] },
+                { model: Course, as: "course", attributes: ["name"] }
+            ]
         });
 
         if (!course)
             return res.status(404).json({ message: "No se encontró el curso" });
 
-        if (course.teacher_id)
-            return res.status(400).json({ message: "Este curso ya tiene profesor asignado" });
-
-        await course.update({
-            teacher_id: id
+        const verTeacher = await ClassSubject.findOne({
+            where: { 
+                class_section_id:  course.id,
+                teacher_id: id
+            }
         });
+        
+        if(!verTeacher)
+            return res.status(400).json({message: "Este usuario no esta asignado a este curso"})
 
         return res.json({
             message: "Profesor asignado correctamente",
@@ -116,8 +150,10 @@ const codeCourse = async (req, res) => {
 
 // Obtener materias de un profesor
 const teacherSubject = async (req, res) => {
+    const id = req.user.id;
     try {
         const subjects = await ClassSubject.findAll({
+            where: {teacher_id: id},
             include: [
                 { model: Subject, as: 'subject' }
             ]

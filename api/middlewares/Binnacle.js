@@ -12,6 +12,8 @@ async function BitacoraMiddleware(req, res) {
         const old_value = req.old_value || {};
         const result = req.result || {};
 
+        console.log(req.user.id)
+
         const filtered = Object.fromEntries(
             Object.entries(old_value).filter(([key]) => 
                 facts && Object.keys(facts).includes(key)
@@ -20,10 +22,19 @@ async function BitacoraMiddleware(req, res) {
         
 
         let payload = {
+            responsible_id: req.user.id,
             table: table,
             created_at: new Date(),
             action: method
         };
+ 
+        payload.entity_id = (
+            method == "post" || method == "delete"
+                ? facts.id
+                : method == "put"
+                    ? old_value.id
+                    : result.id
+        )
 
         payload.facts = Object.keys(facts).length === 0
             ? JSON.stringify(Object.keys(result))
@@ -56,11 +67,10 @@ async function BitacoraMiddleware(req, res) {
     }
 }
 //)}
-
 async function Prepare_bitacora(req, res, next) {
     const table_name = req.table;
     const method = req.method.toLowerCase();
-    const create = req.create; //lo manda el controlador despues del create
+    const create = req.create; //Este valor lo manda despues el controlador POST ya que prepare va despues
     const { idD } = req.params || {};
     const { idU } = req.body || {};
 

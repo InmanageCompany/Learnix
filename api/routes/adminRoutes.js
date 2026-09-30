@@ -8,7 +8,7 @@ const Binnacle = require('../middlewares/Binnacle')
 // ===================== Rutas =====================
 
 //router.post('/createRole', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), adminControllers.createRole);
-router.post('/createRole', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), authMiddleware.checkPermission(5,1) , adminControllers.createRole, Binnacle.Prepare_bitacora);
+router.post('/createRole', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), authMiddleware.checkPermission(10,1) , adminControllers.createRole, Binnacle.Prepare_bitacora);
 router.get('/roles', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), adminControllers.roleList);
 router.post('/createUser', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), authMiddleware.checkPermission(1, 1), adminControllers.createUser);
 //router.delete('/deleteUser', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), adminControllers.deleteUser);

@@ -34,7 +34,7 @@ async function seedDatabase() {
         });
 
         // === 1. ROLES ===
-        const roleNames = ['admin', 'teacher', 'rector', 'student'];
+        const roleNames = ['admin', 'teacher', 'rector', 'student', 'preceptor', 'familiar'];
         const roles = {};
 
         for (const name of roleNames) {
@@ -78,14 +78,36 @@ async function seedDatabase() {
                 isActive: true
             },
             {
+                role: 'preceptor',
+                name: 'Preceptor Jose',
+                email: 'preceptor@learnix.com',
+                password: await bcrypt.hash('preceptor123', 10),
+                date_of_birth: '1993-08-15',
+                phone: '4444444444',
+                cuil: 20444444444,
+                tuition: 4000,
+                isActive: true
+            },
+            {
+                role: 'familiar',
+                name: 'Familiar Perez',
+                email: 'familiar@learnix.com',
+                password: await bcrypt.hash('familiar123', 10),
+                date_of_birth: '1983-08-15',
+                phone: '5555555555',
+                cuil: 20555555555,
+                tuition: null,
+                isActive: true
+            },
+            {
                 role: 'student',
                 name: 'Alumno Pérez',
                 email: 'student@learnix.com',
                 password: await bcrypt.hash('student123', 10),
                 date_of_birth: '2008-09-10',
-                phone: '4444444444',
-                cuil: 20444444444,
-                tuition: 4000,
+                phone: '6666666666',
+                cuil: 20666666666,
+                tuition: 6000,
                 isActive: true
             }
         ];
@@ -108,9 +130,9 @@ async function seedDatabase() {
 
         // === 3. PERIODOS ===
         const periodsData = [
-            { name: 'Primer Trimestre', date_init: '2025-03-01', date_end: '2025-05-31' },
-            { name: 'Segundo Trimestre', date_init: '2025-06-01', date_end: '2025-08-31' },
-            { name: 'Tercer Trimestre', date_init: '2025-09-01', date_end: '2025-11-30' }
+            { name: 'Primer Trimestre', date_init: '2026-03-01', date_end: '2026-05-31' },
+            { name: 'Segundo Trimestre', date_init: '2026-06-01', date_end: '2026-08-31' },
+            { name: 'Tercer Trimestre', date_init: '2026-09-01', date_end: '2026-11-30' }
         ];
 
         const periods = [];
@@ -155,7 +177,6 @@ async function seedDatabase() {
             defaults: {
                 year_id: years['1er Año'].id,
                 courses_id: courses['A'].id,
-                teacher_id: null,
                 code: 101
             }
         });
@@ -165,7 +186,8 @@ async function seedDatabase() {
             await ClassSubject.findOrCreate({
                 where: {
                     class_section_id: classSection.id,
-                    subject_id: s.id
+                    subject_id: s.id,
+                    teacher_id: users['teacher'].id
                 }
             });
         }
@@ -205,7 +227,24 @@ async function seedDatabase() {
         }
 
         // === 12. ENTIDADES, ACCIONES, PERMISOS, ROLES ===
-        const entities = ['User', 'Grade', 'Report_card', 'Subject', 'ClassSection', 'Period', 'Permission', 'Binnacle'];
+        const entities = [
+            'User',
+            'Grade',
+            'Report_card',
+            'Subject',
+            'ClassSection',
+            'Period',
+            'Permission',
+            'Binnacle',
+            'School',
+            'Role',
+            'Year',
+            'Course',
+            'ClassSubject',
+            'StudentClass',
+            'ReportCard',
+            'RolePermission'
+        ];
         const actions = ['create', 'read', 'update', 'delete'];
 
         const entityRecords = {};

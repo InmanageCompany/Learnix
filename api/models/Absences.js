@@ -1,22 +1,22 @@
 const sequelize = require('../config/db');
 const { DataTypes } = require('sequelize');
 
-const ClassSubject = sequelize.define('ClassSubject', {
-    class_section_id: {
+const Absences = sequelize.define('Absences', {
+    student_id: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    subject_id: {
-        type: DataTypes.INTEGER,
+    date: {
+        type: DataTypes.DATEONLY,
         allowNull: false
     },
-    teacher_id: {
+    period_id: {
         type: DataTypes.INTEGER,
         allowNull: false
     }
 }, {
     timestamps: false,
-    tableName: 'class_subjects'
+    tableName: 'absences'
 });
 
-module.exports = ClassSubject;
+module.exports = Absences;
