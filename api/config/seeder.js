@@ -265,8 +265,29 @@ async function seedDatabase() {
                     where: { entity_id: entityRecords[e].id, action_id: actionRecords[a].id }
                 });
 
+                // General
+                if(e == "User" && (a == "read" || a == "update")){
+                    await RolePermission.findOrCreate({ where: { role_id: roles['teacher'].id, permission_id: permission.id } });
+                    await RolePermission.findOrCreate({ where: { role_id: roles['student'].id, permission_id: permission.id } });
+                }
+
+                // Admin
                 await RolePermission.findOrCreate({ where: { role_id: roles['admin'].id, permission_id: permission.id } });
+
+                // Rector
+                if(a == "read")
                 await RolePermission.findOrCreate({ where: { role_id: roles['rector'].id, permission_id: permission.id } });
+
+                // Teacher
+                if(e == "Grade" && (a =="read" || a == "update" || a == "create"))
+                await RolePermission.findOrCreate({ where: { role_id: roles['teacher'].id, permission_id: permission.id } });
+
+                if(a == "read" && (e == "Period" || e == "ClassSubject"))
+                await RolePermission.findOrCreate({ where: { role_id: roles['teacher'].id, permission_id: permission.id } });
+
+                // Student
+                if(a == "read" && (e == "Grade" || e == "Report_card"))
+                await RolePermission.findOrCreate({ where: { role_id: roles['student'].id, permission_id: permission.id } });
             }
         }
 

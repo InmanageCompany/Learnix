@@ -170,7 +170,7 @@ const teacherSubject = async (req, res) => {
 };
 
 // Agregar notas
-const teacherAddGrades = async (req, res) => {
+const teacherAddGrades = async (req, res, next) => {
     const { subject_id, grade_value, comment, user_id, period } = req.body ?? {};
 
 
@@ -195,24 +195,29 @@ const teacherAddGrades = async (req, res) => {
         if (!report)
             return res.status(400).json({ message: 'No hay ningun boletin relacionado al estudiante' });
 
-        const grade = await Grade.findOne({
+        const existingGrade = await Grade.findOne({
             where: {
                 subject_id: subject_id,
                 report_card_id: report.id
             }
         });
 
-        if (grade)
+        if (existingGrade)
             return res.status(400).json({ message: 'Ya hay una nota cargada' });
 
-        await Grade.create({
+        const grade = await Grade.create({
             subject_id,
             report_card_id: report.id,
             grade_value,
             comment
         })
 
-        res.status(201).json({ message: `Nota agregada correctamente correctamente` });
+        req.create = grade;
+        req.result = { message: `Nota agregada correctamente correctamente` }
+
+        //res.status(201).json({ message: `Nota agregada correctamente correctamente` });
+
+        next()
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
