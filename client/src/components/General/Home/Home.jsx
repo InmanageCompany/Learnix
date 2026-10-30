@@ -1,42 +1,88 @@
-import NavBar from '../NavBar/NavBar'
+import { useNavigate } from "react-router-dom";
+import "./Home.css";
+import fondoClase from "../../../assets/fondo-clase.jpg";
 
 function Home() {
-  return (
-    <>
-      <NavBar />
-      <div className="container">
-        <section className="hero">
-          <div className="hero-text">
-            <h1>Learnix — Gestión académica rápida y sencilla</h1>
-            <h2 style={{ fontStyle: "italic" }}>
-              Administrá notas, cursos y alumnos desde una sola plataforma.
-            </h2>
-            <p>
-              Tu plataforma educativa moderna y segura. Accede a tus clases, notas y más desde cualquier dispositivo.
-            </p>
+  const navigate = useNavigate();
 
-            <div className="feature-grid">
-              <div className="feature-card">
-                <h4>Gestión de notas en segundos</h4>
-                <p>Subí, modificá y consultá notas sin complicaciones.</p>
-              </div>
-              <div className="feature-card">
-                <h4>Panel de control claro</h4>
-                <p>Toda la información académica en un solo lugar.</p>
-              </div>
-              <div className="feature-card">
-                <h4>Roles y permisos</h4>
-                <p>Alumnos, profesores y admins con accesos personalizados.</p>
-              </div>
-              <div className="feature-card">
-                <h4>Seguro y moderno</h4>
-                <p>Protección de datos + interfaz intuitiva.</p>
-              </div>
-            </div>
+  return (
+    <main>
+      <section
+        className="hero"
+        style={{ backgroundImage: `url(${fondoClase})` }}
+      >
+        <div className="hero-text">
+          <p className="eyebrow">
+            Learnix — Gestión académica rápida y sencilla
+          </p>
+
+          <h1>
+            Administrá notas, cursos y alumnos desde una sola plataforma.
+          </h1>
+
+          <p className="desc">
+            Accedé a la información académica de forma sencilla,
+            organizada y desde cualquier dispositivo.
+          </p>
+
+          <div className="features">
+            <article className="feature-card">
+              <h4>Gestión de notas</h4>
+              <p>
+                Cargá, modificá y consultá calificaciones de manera sencilla.
+              </p>
+            </article>
+
+            <article className="feature-card">
+              <h4>Información académica</h4>
+              <p>
+                Encontrá la información de cursos y alumnos en un solo lugar.
+              </p>
+            </article>
+
+            <article className="feature-card">
+              <h4>Accesos personalizados</h4>
+              <p>
+                Cada usuario cuenta con herramientas según su perfil.
+              </p>
+            </article>
+
+            <article className="feature-card">
+              <h4>Una comunidad conectada</h4>
+              <p>
+                Facilitá la organización y el seguimiento de la actividad escolar.
+              </p>
+            </article>
           </div>
-        </section>
-      </div>
-    </>
+
+          <div className="home-actions">
+            <button
+              type="button"
+              className="home-btn home-btn-primary"
+              onClick={() => navigate("/register")}
+            >
+              REGISTRARSE
+            </button>
+
+            <button
+              type="button"
+              className="home-btn home-btn-primary"
+              onClick={() => navigate("/login")}
+            >
+              INICIAR SESIÓN
+            </button>
+
+            <button
+              type="button"
+              className="home-btn home-btn-primary"
+              onClick={() => navigate("/student/login")}
+            >
+              ACCESO ESTUDIANTES
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
 
