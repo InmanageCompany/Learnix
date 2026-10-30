@@ -59,17 +59,9 @@ function Home() {
             <button
               type="button"
               className="home-btn home-btn-primary"
-              onClick={() => navigate("/register")}
-            >
-              REGISTRARSE
-            </button>
-
-            <button
-              type="button"
-              className="home-btn home-btn-primary"
               onClick={() => navigate("/login")}
             >
-              INICIAR SESIÓN
+              Iniciar sesión
             </button>
 
             <button
@@ -77,7 +69,7 @@ function Home() {
               className="home-btn home-btn-primary"
               onClick={() => navigate("/student/login")}
             >
-              ACCESO ESTUDIANTES
+              Acceder como estudiante
             </button>
           </div>
         </div>

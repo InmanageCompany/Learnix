@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
 
-import { Home, Login, Register, Profile, Footer } from './components/General'
+import { Home, Login, Profile, Footer } from './components/General'
 
 import { HomeAdmin } from './components/Admin'
 
@@ -19,7 +19,6 @@ function App() {
           {/* RUTAS GENERALES */}
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
           <Route path='/profile' element={<Profile />} />
 
           {/* ADMIN */}
