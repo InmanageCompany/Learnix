@@ -85,7 +85,7 @@ function ModNotes() {
                 <h1>Modficar notas de los alumnos</h1>
 
                 {seeNotes.length === 0 ? (
-                    <h1> No hay notas cargadas para modficar </h1>
+                    <h2> No hay notas cargadas para modficar </h2>
                 ) : (
                     <table>
                         <thead>

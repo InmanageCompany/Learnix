@@ -261,11 +261,15 @@ const teacherSeeGrade = async (req, res) => {
             ]
         });
 
+        console.log(grade);
+
 
         if (grade.length === 0)
-            return res.status(400).json({ message: 'No hay notas relacionadas a esa materia' });
+            return res.status(404).json({ message: 'No hay notas relacionadas a esa materia' });
 
         let filtered = grade.filter((g) => g.report_card.student_id == student_id && g.report_card.period_id == period_id)
+        if(filtered.length === 0) return res.status(404).json({ message: 'No hay notas relacionadas a este periodo' });
+
 
         res.json(filtered);
     } catch (err) {
