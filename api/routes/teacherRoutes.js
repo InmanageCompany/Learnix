@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware')
 const teacherControllers = require('../controllers/teacherControllers');
+const Binnacle = require('../middlewares/Binnacle')
 const rectorControllers = require('../controllers/rectorControllers')
 
 // ===================== Rutas =====================
@@ -13,7 +14,7 @@ router.put('/codeCourse', authMiddleware.verifyToken, authMiddleware.authorizeRo
 router.get('/students/:ClassSection_id', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherStudents);
 router.get('/periods', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), rectorControllers.Period_List);
 router.get('/subjects', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherSubject);
-router.post('/addGrade', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherAddGrades);
+router.post('/addGrade', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), authMiddleware.checkPermission(2,1),teacherControllers.teacherAddGrades, Binnacle.Prepare_bitacora);
 router.get('/seeGrade/:student_id/:subject_id/:period_id', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherSeeGrade);
 router.put('/updateGrade', authMiddleware.verifyToken, authMiddleware.authorizeRole(['teacher']), teacherControllers.teacherUpdateGrade);
 

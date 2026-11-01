@@ -1,20 +1,23 @@
 // ===================== Importaciones =====================
-const { where, Op } = require('sequelize');
-const { Role, User, Course, ClassSection, Subject, ClassSubject, StudentClass, Year, ReportCard, Grade, Period } = require('../models');
+const { Role, User, Course, ClassSection, Subject, ClassSubject, StudentClass, Year, ReportCard, Grade, Period, School } = require('../models');
 const bcrypt = require('bcrypt');
 
 // ===================== Controladores =====================
 
 // Registro de profesor
 const registerTeacher = async (req, res) => {
-    const { name, date_of_birth, phone, cuil, email, password } = req.body;
+    const { name, date_of_birth, phone, cuil, email, password, school_id } = req.body;
 
     try {
-        if (!name || !date_of_birth || !phone || !cuil || !email || !password)
+        if (!name || !date_of_birth || !phone || !cuil || !email || !password || !school_id)
             return res.status(400).json({ message: 'Faltan datos obligatorios' });
 
         if (isNaN(Date.parse(date_of_birth)))
             return res.status(400).json({ message: 'La fecha de nacimiento no es válida' });
+
+        const school = await School.findByPk(school_id);
+        if (!school)
+            return res.status(400).json({ message: "La escuela no existe" });
 
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser)
@@ -24,6 +27,7 @@ const registerTeacher = async (req, res) => {
 
         const newUser = await User.create({
             role_id: 2,
+            school_id,
             name,
             date_of_birth,
             phone,
@@ -51,6 +55,32 @@ const teacherCourses = async (req, res) => {
         return res.status(404).json({ message: "No hay id registrado" });
 
     try {
+        const classSubjects = await ClassSubject.findAll({
+            where: { teacher_id: id },
+            include: [{ 
+                model: ClassSection, 
+                as: 'class_section',
+                include: [
+                    { model: Year, as: "year", attributes: ["name"] },
+                    { model: Course, as: "course", attributes: ["name"] }
+                ]
+            }]
+        });
+        
+        console.log(classSubjects);
+
+        // Dedupe por class_section_id
+        const seen = new Set();
+        const classSections = classSubjects
+            .filter(cs => {
+                if (seen.has(cs.class_section_id)) return false;
+                seen.add(cs.class_section_id);
+                return true;
+            })
+            .map(cs => cs.class_section);
+
+        res.json(classSections);
+        /*
         const courses = await ClassSection.findAll({
             where: { teacher_id: id },
             include: [
@@ -64,6 +94,7 @@ const teacherCourses = async (req, res) => {
             return res.status(404).json('No hay cursos registrados');
 
         res.json(courses);
+        */
     } catch (err) {
         console.error(err);
         return res.status(500).json({
@@ -73,7 +104,7 @@ const teacherCourses = async (req, res) => {
     }
 };
 
-// Ingresar código de curso
+// Ingresar código de curso /
 const codeCourse = async (req, res) => {
     const id = req.user.id;
     const code = Number(req.body.code);
@@ -83,18 +114,25 @@ const codeCourse = async (req, res) => {
 
     try {
         const course = await ClassSection.findOne({
-            where: { code }
+            where: { code },
+            include: [
+                { model: Year, as: "year", attributes: ["name"] },
+                { model: Course, as: "course", attributes: ["name"] }
+            ]
         });
 
         if (!course)
             return res.status(404).json({ message: "No se encontró el curso" });
 
-        if (course.teacher_id)
-            return res.status(400).json({ message: "Este curso ya tiene profesor asignado" });
-
-        await course.update({
-            teacher_id: id
+        const verTeacher = await ClassSubject.findOne({
+            where: { 
+                class_section_id:  course.id,
+                teacher_id: id
+            }
         });
+        
+        if(!verTeacher)
+            return res.status(400).json({message: "Este usuario no esta asignado a este curso"})
 
         return res.json({
             message: "Profesor asignado correctamente",
@@ -112,8 +150,10 @@ const codeCourse = async (req, res) => {
 
 // Obtener materias de un profesor
 const teacherSubject = async (req, res) => {
+    const id = req.user.id;
     try {
         const subjects = await ClassSubject.findAll({
+            where: {teacher_id: id},
             include: [
                 { model: Subject, as: 'subject' }
             ]
@@ -130,7 +170,7 @@ const teacherSubject = async (req, res) => {
 };
 
 // Agregar notas
-const teacherAddGrades = async (req, res) => {
+const teacherAddGrades = async (req, res, next) => {
     const { subject_id, grade_value, comment, user_id, period } = req.body ?? {};
 
 
@@ -141,8 +181,8 @@ const teacherAddGrades = async (req, res) => {
             return res.status(400).json('No hay ningun bimestre');
 
         if (periodC.id == 2) {
-            if (isNaN(grade_value)) return res.status(400).json({message: 'La nota tiene que ser numero'});
-            if (grade_value < 1 || grade_value > 10) return res.status(400).json({message:'La nota no puede valer menos que 1 o mas que 10'})
+            if (isNaN(grade_value)) return res.status(400).json({ message: 'La nota tiene que ser numero' });
+            if (grade_value < 1 || grade_value > 10) return res.status(400).json({ message: 'La nota no puede valer menos que 1 o mas que 10' })
         }
 
         const report = await ReportCard.findOne({
@@ -153,26 +193,31 @@ const teacherAddGrades = async (req, res) => {
         });
 
         if (!report)
-            return res.status(400).json({message: 'No hay ningun boletin relacionado al estudiante'});
+            return res.status(400).json({ message: 'No hay ningun boletin relacionado al estudiante' });
 
-        const grade = await Grade.findOne({
+        const existingGrade = await Grade.findOne({
             where: {
                 subject_id: subject_id,
                 report_card_id: report.id
             }
         });
 
-        if (grade)
-            return res.status(400).json({message:'Ya hay una nota cargada'});
+        if (existingGrade)
+            return res.status(400).json({ message: 'Ya hay una nota cargada' });
 
-        await Grade.create({
+        const grade = await Grade.create({
             subject_id,
             report_card_id: report.id,
             grade_value,
             comment
         })
 
-        res.status(201).json({ message: `Nota agregada correctamente correctamente` });
+        req.create = grade;
+        req.result = { message: `Nota agregada correctamente correctamente` }
+
+        //res.status(201).json({ message: `Nota agregada correctamente correctamente` });
+
+        next()
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
@@ -216,11 +261,15 @@ const teacherSeeGrade = async (req, res) => {
             ]
         });
 
+        console.log(grade);
+
 
         if (grade.length === 0)
-            return res.status(400).json({ message: 'No hay notas relacionadas a esa materia' });
+            return res.status(404).json({ message: 'No hay notas relacionadas a esa materia' });
 
         let filtered = grade.filter((g) => g.report_card.student_id == student_id && g.report_card.period_id == period_id)
+        if(filtered.length === 0) return res.status(404).json({ message: 'No hay notas relacionadas a este periodo' });
+
 
         res.json(filtered);
     } catch (err) {
@@ -235,8 +284,8 @@ const teacherUpdateGrade = async (req, res) => {
         const { period_id, grade_id, grade_value, comment } = req.body;
 
         if (period_id == 2) {
-            if (isNaN(grade_value)) return res.status(400).json('La nota tiene que ser numero');
-            if (grade_value < 1 || grade_value > 10) return res.status(400).json('La nota no puede valer menos que 1 o mas que 10')
+            if (isNaN(grade_value)) return res.status(400).json({message:'La nota tiene que ser numero'});
+            if (grade_value < 1 || grade_value > 10) return res.status(400).json({message:'La nota no puede valer menos que 1 o mas que 10'})
         }
 
         const grade = await Grade.update({
@@ -248,7 +297,7 @@ const teacherUpdateGrade = async (req, res) => {
 
 
         if (grade.length === 0)
-            return res.status(400).json('No se actualizo ninguna nota');
+            return res.status(400).json({message:'No se actualizo ninguna nota'});
 
         res.json({ message: "Se actualizo la nota con exito" });
     } catch (err) {

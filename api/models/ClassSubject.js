@@ -9,6 +9,10 @@ const ClassSubject = sequelize.define('ClassSubject', {
     subject_id: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    teacher_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 }, {
     timestamps: false,

@@ -9,7 +9,7 @@ function SubjectItem({ subject, course }) {
 
       <Button
         component={Link}
-        to={`/teacher/alumns/${course.id}`}
+        to={`/teacher/students/${course.id}`}
         state={{ subject_id: subject.subject.id }}
         variant="contained"
         sx={{

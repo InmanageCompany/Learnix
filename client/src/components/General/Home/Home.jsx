@@ -15,7 +15,6 @@ function Home() {
               Tu plataforma educativa moderna y segura. Accede a tus clases, notas y más desde cualquier dispositivo.
             </p>
 
-            {/* CONTENEDOR DE TARJETAS */}
             <div className="feature-grid">
               <div className="feature-card">
                 <h4>Gestión de notas en segundos</h4>
@@ -34,7 +33,6 @@ function Home() {
                 <p>Protección de datos + interfaz intuitiva.</p>
               </div>
             </div>
-            {/* FIN CARDS */}
           </div>
         </section>
       </div>

@@ -18,9 +18,9 @@ const createRole = async (req, res, next) => {
       return res.status(400).json({ message: 'El rol ya existe' });
 
     const role = await Role.create({ name: lowerCaseName });
-
+    
     req.create = role,
-      req.result = { message: 'Rol creado correctamente', role };
+    req.result = { message: 'Rol creado correctamente', role };
 
     //res.status(201).json({ message: 'Rol creado correctamente', role});
     next();

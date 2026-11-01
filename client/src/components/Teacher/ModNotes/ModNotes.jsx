@@ -21,9 +21,6 @@ function ModNotes() {
     const subject_id = state.subject_id;
     const period_id = state.period_id;
 
-    console.log(period_id);
-    console.log(subject_id);
-
     const List = async () => {
         try {
         let ar = [] 
@@ -63,6 +60,8 @@ function ModNotes() {
             );
 
             alert(response.data.message);
+
+            await List();
         } catch (error) {
             if (error.response)
                 alert(error.response.data.message);
@@ -78,14 +77,7 @@ function ModNotes() {
     useEffect(() => {
         List();
     }, []);
-
-    useEffect(() => {
-        //practica
-        console.log(seeNotes);
-        console.log(seeNotes.map(item => item.map((a) => a.report_card.student.name)));
-    }, [seeNotes]);
     
-
     return (
         <>
             <NavBarTeacher />
@@ -93,7 +85,7 @@ function ModNotes() {
                 <h1>Modficar notas de los alumnos</h1>
 
                 {seeNotes.length === 0 ? (
-                    <h1> No hay notas cargadas para modficar </h1>
+                    <h2> No hay notas cargadas para modficar </h2>
                 ) : (
                     <table>
                         <thead>

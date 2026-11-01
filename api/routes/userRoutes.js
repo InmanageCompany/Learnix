@@ -17,6 +17,9 @@ router.get('/info', authMiddleware.verifyToken, authMiddleware.checkPermission(1
 // Ruta para actualizar de usuario
 //router.put('/update', authMiddleware.verifyToken, userControllers.updateUser);
 router.put('/update', authMiddleware.verifyToken, authMiddleware.checkPermission(1,3), Binnacle.Prepare_bitacora, userControllers.updateUser);
+router.get("/schools", userControllers.getSchools);
+
+
 //router.get('/practica', authMiddleware.BitacoraMiddleware);
 
 // ===================== Exportaciones =====================

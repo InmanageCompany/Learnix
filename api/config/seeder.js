@@ -1,5 +1,6 @@
 // ===================== Importaciones =====================
 const {
+    School,
     Role,
     User,
     Period,
@@ -24,8 +25,16 @@ async function seedDatabase() {
     try {
         console.log('Iniciando carga de datos de prueba...');
 
+        // === 0. ESCUELA ===
+        const [school] = await School.findOrCreate({
+            where: { name: 'E.T.N°26 "Confederación Suiza"' },
+            defaults: {
+                address: 'Ciudad Autónoma de Buenos Aires'
+            }
+        });
+
         // === 1. ROLES ===
-        const roleNames = ['admin', 'teacher', 'rector', 'student'];
+        const roleNames = ['admin', 'teacher', 'rector', 'student', 'preceptor', 'familiar'];
         const roles = {};
 
         for (const name of roleNames) {
@@ -69,14 +78,36 @@ async function seedDatabase() {
                 isActive: true
             },
             {
+                role: 'preceptor',
+                name: 'Preceptor Jose',
+                email: 'preceptor@learnix.com',
+                password: await bcrypt.hash('preceptor123', 10),
+                date_of_birth: '1993-08-15',
+                phone: '4444444444',
+                cuil: 20444444444,
+                tuition: 4000,
+                isActive: true
+            },
+            {
+                role: 'familiar',
+                name: 'Familiar Perez',
+                email: 'familiar@learnix.com',
+                password: await bcrypt.hash('familiar123', 10),
+                date_of_birth: '1983-08-15',
+                phone: '5555555555',
+                cuil: 20555555555,
+                tuition: null,
+                isActive: true
+            },
+            {
                 role: 'student',
                 name: 'Alumno Pérez',
                 email: 'student@learnix.com',
                 password: await bcrypt.hash('student123', 10),
                 date_of_birth: '2008-09-10',
-                phone: '4444444444',
-                cuil: 20444444444,
-                tuition: 4000,
+                phone: '6666666666',
+                cuil: 20666666666,
+                tuition: 6000,
                 isActive: true
             }
         ];
@@ -84,23 +115,37 @@ async function seedDatabase() {
         const users = {};
         for (const u of usersData) {
             const { role, ...userData } = u;
+
             const [user] = await User.findOrCreate({
                 where: { email: u.email },
                 defaults: {
                     role_id: roles[role].id,
+                    school_id: school.id,
                     ...userData
                 }
             });
+
             users[role] = user;
         }
 
         // === 3. PERIODOS ===
         const periodsData = [
-            { name: 'Primer Trimestre', date_init: '2025-03-01', date_end: '2025-05-31' },
-            { name: 'Segundo Trimestre', date_init: '2025-06-01', date_end: '2025-08-31' },
-            { name: 'Tercer Trimestre', date_init: '2025-09-01', date_end: '2025-11-30' }
+            { name: 'Primer Trimestre', date_init: '2026-03-01', date_end: '2026-05-31' },
+            { name: 'Segundo Trimestre', date_init: '2026-06-01', date_end: '2026-08-31' },
+            { name: 'Tercer Trimestre', date_init: '2026-09-01', date_end: '2026-11-30' }
         ];
-        for (const p of periodsData) await Period.findOrCreate({ where: { name: p.name }, defaults: p });
+
+        const periods = [];
+        for (const p of periodsData) {
+            const [period] = await Period.findOrCreate({
+                where: { name: p.name },
+                defaults: {
+                    ...p,
+                    school_id: school.id
+                }
+            });
+            periods.push(period);
+        }
 
         // === 4. MATERIAS ===
         const subjectNames = ['Matemática', 'Lengua', 'Historia', 'Ciencias Naturales', 'Educación Física'];
@@ -132,7 +177,6 @@ async function seedDatabase() {
             defaults: {
                 year_id: years['1er Año'].id,
                 courses_id: courses['A'].id,
-                teacher_id: null,
                 code: 101
             }
         });
@@ -142,7 +186,8 @@ async function seedDatabase() {
             await ClassSubject.findOrCreate({
                 where: {
                     class_section_id: classSection.id,
-                    subject_id: s.id
+                    subject_id: s.id,
+                    teacher_id: users['teacher'].id
                 }
             });
         }
@@ -161,6 +206,9 @@ async function seedDatabase() {
             where: {
                 student_id: users['student'].id,
                 period_id: period.id
+            },
+            defaults: {
+                school_id: school.id
             }
         });
 
@@ -179,7 +227,24 @@ async function seedDatabase() {
         }
 
         // === 12. ENTIDADES, ACCIONES, PERMISOS, ROLES ===
-        const entities = ['User', 'Grade', 'Report_card', 'Subject', 'ClassSection', 'Period', 'Permission', 'Binnacle'];
+        const entities = [
+            'User',
+            'Grade',
+            'Report_card',
+            'Subject',
+            'ClassSection',
+            'Period',
+            'Permission',
+            'Binnacle',
+            'School',
+            'Role',
+            'Year',
+            'Course',
+            'ClassSubject',
+            'StudentClass',
+            'ReportCard',
+            'RolePermission'
+        ];
         const actions = ['create', 'read', 'update', 'delete'];
 
         const entityRecords = {};
@@ -200,8 +265,29 @@ async function seedDatabase() {
                     where: { entity_id: entityRecords[e].id, action_id: actionRecords[a].id }
                 });
 
+                // General
+                if(e == "User" && (a == "read" || a == "update")){
+                    await RolePermission.findOrCreate({ where: { role_id: roles['teacher'].id, permission_id: permission.id } });
+                    await RolePermission.findOrCreate({ where: { role_id: roles['student'].id, permission_id: permission.id } });
+                }
+
+                // Admin
                 await RolePermission.findOrCreate({ where: { role_id: roles['admin'].id, permission_id: permission.id } });
+
+                // Rector
+                if(a == "read")
                 await RolePermission.findOrCreate({ where: { role_id: roles['rector'].id, permission_id: permission.id } });
+
+                // Teacher
+                if(e == "Grade" && (a =="read" || a == "update" || a == "create"))
+                await RolePermission.findOrCreate({ where: { role_id: roles['teacher'].id, permission_id: permission.id } });
+
+                if(a == "read" && (e == "Period" || e == "ClassSubject"))
+                await RolePermission.findOrCreate({ where: { role_id: roles['teacher'].id, permission_id: permission.id } });
+
+                // Student
+                if(a == "read" && (e == "Grade" || e == "Report_card"))
+                await RolePermission.findOrCreate({ where: { role_id: roles['student'].id, permission_id: permission.id } });
             }
         }
 

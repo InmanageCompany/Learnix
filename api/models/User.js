@@ -6,6 +6,10 @@ const User = sequelize.define('User', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    school_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     name: {
         type: DataTypes.STRING(150),
         allowNull: false
