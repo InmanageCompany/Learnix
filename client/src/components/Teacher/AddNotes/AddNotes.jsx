@@ -12,6 +12,7 @@ function AddNotes() {
   
   const [comment, SetComentario] = useState({});
   const [conceptual, SetConceptual] = useState(["En proceso", "Suficiente", "Avanzado"]);
+  const [numerica, SetNumerica] = useState([1,2,3,4,5,6,7,8,9,10]);
   const token = localStorage.getItem("token")
 
   const location = useLocation();
@@ -133,12 +134,30 @@ function AddNotes() {
                         }
                       </Select>
                     ) : (
+                      <Select
+                        value={notes[item.id] || ""}
+                        label="Notas"
+                        onChange={(e) =>
+                          setNotes({
+                            ...notes,
+                            [item.id]: e.target.value
+                          })
+                        }
+                      >
+                        {numerica.map((c, i) => (
+                          <MenuItem key={i} value={c}>
+                            {c}
+                          </MenuItem>))
+                        }
+                      </Select>
+                      /*
                       <input type="text" placeholder="Numero" onChange={(e) =>
                         setNotes({
                           ...notes,
                           [item.id]: e.target.value
                         })
                       } />
+                      */
                     )}
                   </th>
                   <th>

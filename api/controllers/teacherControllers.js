@@ -57,8 +57,8 @@ const teacherCourses = async (req, res) => {
     try {
         const classSubjects = await ClassSubject.findAll({
             where: { teacher_id: id },
-            include: [{ 
-                model: ClassSection, 
+            include: [{
+                model: ClassSection,
                 as: 'class_section',
                 include: [
                     { model: Year, as: "year", attributes: ["name"] },
@@ -66,7 +66,7 @@ const teacherCourses = async (req, res) => {
                 ]
             }]
         });
-        
+
         console.log(classSubjects);
 
         // Dedupe por class_section_id
@@ -125,14 +125,14 @@ const codeCourse = async (req, res) => {
             return res.status(404).json({ message: "No se encontró el curso" });
 
         const verTeacher = await ClassSubject.findOne({
-            where: { 
-                class_section_id:  course.id,
+            where: {
+                class_section_id: course.id,
                 teacher_id: id
             }
         });
-        
-        if(!verTeacher)
-            return res.status(400).json({message: "Este usuario no esta asignado a este curso"})
+
+        if (!verTeacher)
+            return res.status(400).json({ message: "Este usuario no esta asignado a este curso" })
 
         return res.json({
             message: "Profesor asignado correctamente",
@@ -153,7 +153,7 @@ const teacherSubject = async (req, res) => {
     const id = req.user.id;
     try {
         const subjects = await ClassSubject.findAll({
-            where: {teacher_id: id},
+            where: { teacher_id: id },
             include: [
                 { model: Subject, as: 'subject' }
             ]
@@ -226,21 +226,37 @@ const teacherAddGrades = async (req, res, next) => {
 
 // Obtener alumnos de la seccion de un profesor
 const teacherStudents = async (req, res) => {
-    const { ClassSection_id } = req.params;
+    const { ClassSection_id, subject_id, period_id } = req.params;
+    let info = []
 
     try {
 
-        const Students = await StudentClass.findAll({
+        const students = await StudentClass.findAll({
             where: { class_sections_id: ClassSection_id },
             include: [
                 { model: User, as: 'student' }
             ]
         });
 
-        if (!Students)
+        if (!students)
             return res.status(400).json('No hay estudiantes en la seccion registrados');
 
-        res.json(Students)
+        for (const s of students) {
+            const grades = await Grade.findOne({
+                where: { subject_id },
+                include: [
+                    {
+                  model: ReportCard,
+                  as: 'report_card',
+                  where: { student_id: s.student.id, period_id }
+                    }
+                ]
+            });
+
+            info.push({ id: s.student.id, name: s.student.name , filtered: grades });
+        }
+
+        res.json(info)
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
@@ -268,7 +284,7 @@ const teacherSeeGrade = async (req, res) => {
             return res.status(404).json({ message: 'No hay notas relacionadas a esa materia' });
 
         let filtered = grade.filter((g) => g.report_card.student_id == student_id && g.report_card.period_id == period_id)
-        if(filtered.length === 0) return res.status(404).json({ message: 'No hay notas relacionadas a este periodo' });
+        if (filtered.length === 0) return res.status(404).json({ message: 'No hay notas relacionadas a este periodo' });
 
 
         res.json(filtered);
@@ -279,27 +295,29 @@ const teacherSeeGrade = async (req, res) => {
 };
 
 // Actualizar notas
-const teacherUpdateGrade = async (req, res) => {
+const teacherUpdateGrade = async (req, res, next) => {
     try {
         const { period_id, grade_id, grade_value, comment } = req.body;
+        const changes = { grade_value, comment };
 
         if (period_id == 2) {
-            if (isNaN(grade_value)) return res.status(400).json({message:'La nota tiene que ser numero'});
-            if (grade_value < 1 || grade_value > 10) return res.status(400).json({message:'La nota no puede valer menos que 1 o mas que 10'})
+            if (isNaN(grade_value)) return res.status(400).json({ message: 'La nota tiene que ser un numero' });
+            if (grade_value < 1 || grade_value > 10) return res.status(400).json({ message: 'La nota no puede valer menos que 1 o mas que 10' })
         }
 
-        const grade = await Grade.update({
-            grade_value,
-            comment
-        },
+        const grade = await Grade.update(changes,
             { where: { id: grade_id } }
         );
 
 
         if (grade.length === 0)
-            return res.status(400).json({message:'No se actualizo ninguna nota'});
+            return res.status(400).json({ message: 'No se actualizo ninguna nota' });
 
-        res.json({ message: "Se actualizo la nota con exito" });
+        req.facts = changes;
+        req.result = { message: "Se actualizo la nota con exito" };
+
+        //res.json({ message: "Se actualizo la nota con exito" });
+        next();
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Error interno del servidor', error: err.message });

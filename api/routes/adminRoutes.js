@@ -9,11 +9,11 @@ const Binnacle = require('../middlewares/Binnacle')
 
 //router.post('/createRole', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), adminControllers.createRole);
 router.post('/createRole', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), authMiddleware.checkPermission(10,1) , adminControllers.createRole, Binnacle.Prepare_bitacora);
-router.get('/roles', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), adminControllers.roleList);
-router.post('/createUser', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), authMiddleware.checkPermission(1, 1), adminControllers.createUser);
+router.get('/roles', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), authMiddleware.checkPermission(10,2), adminControllers.roleList);
+router.post('/createUser', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), authMiddleware.checkPermission(1, 1), adminControllers.createUser, Binnacle.Prepare_bitacora);
 //router.delete('/deleteUser', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), adminControllers.deleteUser);
 router.delete('/deleteUser/:idD', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), authMiddleware.checkPermission(1,4), Binnacle.Prepare_bitacora ,adminControllers.deleteUser);
-router.get('/users', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), adminControllers.getUsers);
+router.get('/users', authMiddleware.verifyToken, authMiddleware.authorizeRole(['admin']), authMiddleware.checkPermission(1,2), adminControllers.getUsers);
 
 // ===================== Exportaciones =====================
 module.exports = router;
