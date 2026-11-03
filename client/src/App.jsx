@@ -26,7 +26,7 @@ function App() {
 
           {/* ADMIN */}
           <Route path='/admin/home' element={<HomeAdmin />} />
-          <Route path='/admin/users' element={<UsersAdmin />} />
+          <Route path='/admin/getUsers' element={<UsersAdmin />} />
 
           {/* RECTOR */}
           <Route path='/rector/home' element={<HomeRector />} />
