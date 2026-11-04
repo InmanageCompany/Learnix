@@ -9,7 +9,7 @@ function UsersAdmin() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/admin/getUsers",
+      const response = await axios.get("http://localhost:3000/api/admin/user",
         {
           headers: { Authorization: token }
         }
