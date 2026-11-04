@@ -24,7 +24,6 @@ async function BitacoraMiddleware(req, res) {
         let payload = {
             responsible_id: req.user.id,
             table: table,
-            created_at: new Date(),
             action: method
         };
  

@@ -24,7 +24,9 @@ const Binnacle = sequelize.define('Binnacle', {
         type: DataTypes.STRING(500)
     },
     created_at: {
-        type: DataTypes.DATEONLY
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW   // se asigna automáticamente al crear el registro
     }
 }, {
     timestamps: false,

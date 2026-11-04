@@ -297,7 +297,7 @@ const teacherSeeGrade = async (req, res) => {
 // Actualizar notas
 const teacherUpdateGrade = async (req, res, next) => {
     try {
-        const { period_id, grade_id, grade_value, comment } = req.body;
+        const { period_id, idU, grade_value, comment } = req.body;
         const changes = { grade_value, comment };
 
         if (period_id == 2) {
@@ -306,7 +306,7 @@ const teacherUpdateGrade = async (req, res, next) => {
         }
 
         const grade = await Grade.update(changes,
-            { where: { id: grade_id } }
+            { where: { id: idU } }
         );
 
 

@@ -49,7 +49,7 @@ function ModNotes() {
     const UpdateGrades = async (grade_id) => {
         try {
             const response = await axios.put(`http://localhost:3000/api/teacher/updateGrade`, {
-                grade_id,
+                idU: grade_id,
                 grade_value: notes[grade_id],
                 period_id: period_id,
                 comment: comment[grade_id]
