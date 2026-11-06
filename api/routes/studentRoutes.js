@@ -6,11 +6,14 @@ const studentControllers = require('../controllers/studentControllers')
 
 // ===================== Rutas =====================
 
-// Ruta para crear ROL
-router.get('/reportCards', authMiddleware.verifyToken, authMiddleware.authorizeRole(['student']), studentControllers.studentReports);
+// Ruta para visualizar boletines
+router.get('/reportCards', authMiddleware.verifyToken, authMiddleware.checkPermission(3,2), authMiddleware.authorizeRole(['student']), studentControllers.studentReports);
 
-// Ruta para crear ROL
-router.get('/notes/:report_card_id', authMiddleware.verifyToken, authMiddleware.authorizeRole(['student']), studentControllers.studentNotes);
+// Ruta para visualizar notas
+router.get('/notes/:report_card_id', authMiddleware.verifyToken, authMiddleware.authorizeRole(['student']), authMiddleware.checkPermission(2,2),studentControllers.studentNotes);
+
+// Ruta para visualizar notas modificadas recientemente
+router.get('/notesMod', authMiddleware.verifyToken, authMiddleware.authorizeRole(['student']), authMiddleware.checkPermission(2,2),studentControllers.studentNotesMod);
 
 // ===================== Exportaciones =====================
 module.exports = router;

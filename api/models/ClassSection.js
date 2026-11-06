@@ -10,9 +10,6 @@ const ClassSection = sequelize.define('ClassSection', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    teacher_id: {
-        type: DataTypes.INTEGER
-    },
     name: {
         type: DataTypes.STRING(100),
         allowNull: false

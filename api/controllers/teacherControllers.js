@@ -55,6 +55,32 @@ const teacherCourses = async (req, res) => {
         return res.status(404).json({ message: "No hay id registrado" });
 
     try {
+        const classSubjects = await ClassSubject.findAll({
+            where: { teacher_id: id },
+            include: [{
+                model: ClassSection,
+                as: 'class_section',
+                include: [
+                    { model: Year, as: "year", attributes: ["name"] },
+                    { model: Course, as: "course", attributes: ["name"] }
+                ]
+            }]
+        });
+
+        console.log(classSubjects);
+
+        // Dedupe por class_section_id
+        const seen = new Set();
+        const classSections = classSubjects
+            .filter(cs => {
+                if (seen.has(cs.class_section_id)) return false;
+                seen.add(cs.class_section_id);
+                return true;
+            })
+            .map(cs => cs.class_section);
+
+        res.json(classSections);
+        /*
         const courses = await ClassSection.findAll({
             where: { teacher_id: id },
             include: [
@@ -68,6 +94,7 @@ const teacherCourses = async (req, res) => {
             return res.status(404).json('No hay cursos registrados');
 
         res.json(courses);
+        */
     } catch (err) {
         console.error(err);
         return res.status(500).json({
@@ -77,7 +104,7 @@ const teacherCourses = async (req, res) => {
     }
 };
 
-// Ingresar código de curso
+// Ingresar código de curso /
 const codeCourse = async (req, res) => {
     const id = req.user.id;
     const code = Number(req.body.code);
@@ -87,18 +114,25 @@ const codeCourse = async (req, res) => {
 
     try {
         const course = await ClassSection.findOne({
-            where: { code }
+            where: { code },
+            include: [
+                { model: Year, as: "year", attributes: ["name"] },
+                { model: Course, as: "course", attributes: ["name"] }
+            ]
         });
 
         if (!course)
             return res.status(404).json({ message: "No se encontró el curso" });
 
-        if (course.teacher_id)
-            return res.status(400).json({ message: "Este curso ya tiene profesor asignado" });
-
-        await course.update({
-            teacher_id: id
+        const verTeacher = await ClassSubject.findOne({
+            where: {
+                class_section_id: course.id,
+                teacher_id: id
+            }
         });
+
+        if (!verTeacher)
+            return res.status(400).json({ message: "Este usuario no esta asignado a este curso" })
 
         return res.json({
             message: "Profesor asignado correctamente",
@@ -116,8 +150,10 @@ const codeCourse = async (req, res) => {
 
 // Obtener materias de un profesor
 const teacherSubject = async (req, res) => {
+    const id = req.user.id;
     try {
         const subjects = await ClassSubject.findAll({
+            where: { teacher_id: id },
             include: [
                 { model: Subject, as: 'subject' }
             ]
@@ -134,7 +170,7 @@ const teacherSubject = async (req, res) => {
 };
 
 // Agregar notas
-const teacherAddGrades = async (req, res) => {
+const teacherAddGrades = async (req, res, next) => {
     const { subject_id, grade_value, comment, user_id, period } = req.body ?? {};
 
 
@@ -159,24 +195,29 @@ const teacherAddGrades = async (req, res) => {
         if (!report)
             return res.status(400).json({ message: 'No hay ningun boletin relacionado al estudiante' });
 
-        const grade = await Grade.findOne({
+        const existingGrade = await Grade.findOne({
             where: {
                 subject_id: subject_id,
                 report_card_id: report.id
             }
         });
 
-        if (grade)
+        if (existingGrade)
             return res.status(400).json({ message: 'Ya hay una nota cargada' });
 
-        await Grade.create({
+        const grade = await Grade.create({
             subject_id,
             report_card_id: report.id,
             grade_value,
             comment
         })
 
-        res.status(201).json({ message: `Nota agregada correctamente correctamente` });
+        req.create = grade;
+        req.result = { message: `Nota agregada correctamente correctamente` }
+
+        //res.status(201).json({ message: `Nota agregada correctamente correctamente` });
+
+        next()
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
@@ -185,21 +226,37 @@ const teacherAddGrades = async (req, res) => {
 
 // Obtener alumnos de la seccion de un profesor
 const teacherStudents = async (req, res) => {
-    const { ClassSection_id } = req.params;
+    const { ClassSection_id, subject_id, period_id } = req.params;
+    let info = []
 
     try {
 
-        const Students = await StudentClass.findAll({
+        const students = await StudentClass.findAll({
             where: { class_sections_id: ClassSection_id },
             include: [
                 { model: User, as: 'student' }
             ]
         });
 
-        if (!Students)
+        if (!students)
             return res.status(400).json('No hay estudiantes en la seccion registrados');
 
-        res.json(Students)
+        for (const s of students) {
+            const grades = await Grade.findOne({
+                where: { subject_id },
+                include: [
+                    {
+                  model: ReportCard,
+                  as: 'report_card',
+                  where: { student_id: s.student.id, period_id }
+                    }
+                ]
+            });
+
+            info.push({ id: s.student.id, name: s.student.name , filtered: grades });
+        }
+
+        res.json(info)
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
@@ -220,11 +277,15 @@ const teacherSeeGrade = async (req, res) => {
             ]
         });
 
+        console.log(grade);
+
 
         if (grade.length === 0)
-            return res.status(400).json({ message: 'No hay notas relacionadas a esa materia' });
+            return res.status(404).json({ message: 'No hay notas relacionadas a esa materia' });
 
         let filtered = grade.filter((g) => g.report_card.student_id == student_id && g.report_card.period_id == period_id)
+        if (filtered.length === 0) return res.status(404).json({ message: 'No hay notas relacionadas a este periodo' });
+
 
         res.json(filtered);
     } catch (err) {
@@ -234,27 +295,29 @@ const teacherSeeGrade = async (req, res) => {
 };
 
 // Actualizar notas
-const teacherUpdateGrade = async (req, res) => {
+const teacherUpdateGrade = async (req, res, next) => {
     try {
-        const { period_id, grade_id, grade_value, comment } = req.body;
+        const { period_id, idU, grade_value, comment } = req.body;
+        const changes = { grade_value, comment };
 
         if (period_id == 2) {
-            if (isNaN(grade_value)) return res.status(400).json({message:'La nota tiene que ser numero'});
-            if (grade_value < 1 || grade_value > 10) return res.status(400).json({message:'La nota no puede valer menos que 1 o mas que 10'})
+            if (isNaN(grade_value)) return res.status(400).json({ message: 'La nota tiene que ser un numero' });
+            if (grade_value < 1 || grade_value > 10) return res.status(400).json({ message: 'La nota no puede valer menos que 1 o mas que 10' })
         }
 
-        const grade = await Grade.update({
-            grade_value,
-            comment
-        },
-            { where: { id: grade_id } }
+        const grade = await Grade.update(changes,
+            { where: { id: idU } }
         );
 
 
         if (grade.length === 0)
-            return res.status(400).json({message:'No se actualizo ninguna nota'});
+            return res.status(400).json({ message: 'No se actualizo ninguna nota' });
 
-        res.json({ message: "Se actualizo la nota con exito" });
+        req.facts = changes;
+        req.result = { message: "Se actualizo la nota con exito" };
+
+        //res.json({ message: "Se actualizo la nota con exito" });
+        next();
     } catch (err) {
         console.error(err);
         return res.status(500).json({ message: 'Error interno del servidor', error: err.message });

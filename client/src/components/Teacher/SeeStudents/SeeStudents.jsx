@@ -1,12 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
-import { Button } from '@mui/material';
+import { Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+
 import axios from "axios";
 import NavBarTeacher from '../NavBar/NavBar';
 
 function SeeStudents() {
   const [alumns, setAlumns] = useState([]);
   const [periods, SetPeriods] = useState([]);
+  const [sel_periods, SetSel_periods] = useState("");
 
   const token = localStorage.getItem("token")
   const { ClassSection_id } = useParams()
@@ -18,16 +20,14 @@ function SeeStudents() {
 
   const Alumns = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/teacher/students/${ClassSection_id}`,
+      const response = await axios.get(`http://localhost:3000/api/teacher/students/${ClassSection_id}/${Sid}/${sel_periods}`,
         {
           headers: { Authorization: token }
         }
       );
-
       console.log(response.data);
-      
 
-      setAlumns(response.data.map(r => r.student));
+      setAlumns(response.data);
     } catch (error) {
       if (error.response)
         alert(error.response.data.message);
@@ -49,6 +49,7 @@ function SeeStudents() {
       );
 
       SetPeriods(response.data);
+      SetSel_periods(response.data[0].id);
     } catch (error) {
       if (error.response)
         alert(error.response.data.message);
@@ -62,9 +63,13 @@ function SeeStudents() {
   };
 
   useEffect(() => {
-    Alumns();
     Periods();
   }, []);
+
+  useEffect(() => {
+    if (!sel_periods) return;   // ← no consulta hasta que haya período
+    Alumns();
+  }, [sel_periods, ClassSection_id, Sid]);
 
   return (
     <>
@@ -73,13 +78,36 @@ function SeeStudents() {
         <h1>Panel del Profesor</h1>
         <p>Visualize los alumnos de esta seccion</p>
 
+        <FormControl sx={{ minWidth: 200 }}>
+          <InputLabel id="period-label">Periodos</InputLabel>
+          <Select
+            labelId="period-label"
+            value={sel_periods}
+            label="Periodos"
+            onChange={(e) => SetSel_periods(e.target.value)}
+          >
+            {periods.map((p) => (
+              <MenuItem key={p.id} value={p.id}>
+                {p.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         {alumns.length === 0 ? (
           <p>No hay alumnos asignados.</p>
         ) : (
           <ul>
-            {alumns.map((item) => (
-              <li key={item.id}>
-                {item.name} - {item.email}
+            {alumns.map((a) => (
+              <li key={a.id}>
+                {a.name} -{" "}
+                {a.filtered ? (
+                  <>
+                    {a.filtered.grade_value} - {a.filtered.comment}
+                  </>
+                ) : (
+                  "No hay nota registrada"
+                )}
               </li>
             ))}
           </ul>
@@ -94,19 +122,19 @@ function SeeStudents() {
 
           {periods.map((p) => (
             <Button
-            component={Link}
-            to={`/teacher/notes/mod`}
-            variant="contained"
-            state={{ alumnos: alumns, subject_id: Sid, period_id: p.id }}
-            sx={{ 
-              mt: 2, 
-              backgroundColor: "#2196F3",
-              display: "block", 
-              width: "100%"     
-            }}
-          >
-            {p.name}
-          </Button>
+              component={Link}
+              to={`/teacher/notes/mod`}
+              variant="contained"
+              state={{ alumnos: alumns, subject_id: Sid, period_id: p.id }}
+              sx={{
+                mt: 2,
+                backgroundColor: "#2196F3",
+                display: "block",
+                width: "100%"
+              }}
+            >
+              {p.name}
+            </Button>
           ))}
         </dialog>
       </div>

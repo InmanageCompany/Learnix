@@ -10,9 +10,11 @@ const Year = require('./Year');
 const Course = require('./Course');
 const ClassSection = require('./ClassSection');
 const ClassSubject = require('./ClassSubject');
+const ClassPreceptor = require('./ClassPreceptors');
 const StudentClass = require('./StudentClass');
 const Entity = require('./Entity');
 const Action = require('./Action');
+const Absence = require('./Absences');
 const Permission = require('./Permission');
 const RolePermission = require('./RolePermission');
 const Binnacle = require('./Binnacle');
@@ -23,6 +25,13 @@ const School = require('./School');
 // Roles y Users
 Role.hasMany(User, { foreignKey: 'role_id', as: 'users' });
 User.belongsTo(Role, { foreignKey: 'role_id', as: 'role' });
+
+// Absences
+User.hasMany(Absence, { foreignKey: 'student_id', as: 'absence' });
+Absence.belongsTo(User, { foreignKey: 'student_id', as: 'student' });
+
+Period.hasMany(Absence, { foreignKey: 'period_id', as: 'absence' });
+Absence.belongsTo(Period, { foreignKey: 'period_id', as: 'period' });
 
 // ReportCards
 User.hasMany(ReportCard, { foreignKey: 'student_id', as: 'report_cards' });
@@ -45,8 +54,8 @@ ClassSection.belongsTo(Year, { foreignKey: 'year_id', as: 'year' });
 Course.hasMany(ClassSection, { foreignKey: 'courses_id', as: 'class_sections' });
 ClassSection.belongsTo(Course, { foreignKey: 'courses_id', as: 'course' });
 
-User.hasMany(ClassSection, { foreignKey: 'teacher_id', as: 'teaching_sections' });
-ClassSection.belongsTo(User, { foreignKey: 'teacher_id', as: 'teacher' });
+//User.hasMany(ClassSection, { foreignKey: 'teacher_id', as: 'teaching_sections' });
+//ClassSection.belongsTo(User, { foreignKey: 'teacher_id', as: 'teacher' });
 
 // ClassSubjects
 ClassSection.hasMany(ClassSubject, { foreignKey: 'class_section_id', as: 'class_subjects' });
@@ -55,12 +64,22 @@ ClassSubject.belongsTo(ClassSection, { foreignKey: 'class_section_id', as: 'clas
 Subject.hasMany(ClassSubject, { foreignKey: 'subject_id', as: 'class_subjects' });
 ClassSubject.belongsTo(Subject, { foreignKey: 'subject_id', as: 'subject' });
 
+User.hasMany(ClassSubject, { foreignKey: 'teacher_id', as: 'class_subjects' });
+ClassSubject.belongsTo(User, { foreignKey: 'teacher_id', as: 'teacher' });
+
 // StudentClass
 User.hasMany(StudentClass, { foreignKey: 'student_id', as: 'student_classes' });
 StudentClass.belongsTo(User, { foreignKey: 'student_id', as: 'student' });
 
 ClassSection.hasMany(StudentClass, { foreignKey: 'class_sections_id', as: 'student_classes' });
 StudentClass.belongsTo(ClassSection, { foreignKey: 'class_sections_id', as: 'class_section' });
+
+// ClassPreceptors
+ClassSection.hasMany(ClassPreceptor, { foreignKey: 'class_section_id', as: 'class_preceptors' });
+ClassPreceptor.belongsTo(ClassSection, { foreignKey: 'class_section_id', as: 'class_section' });
+
+User.hasMany(ClassPreceptor, { foreignKey: 'preceptor_id', as: 'class_preceptors' });
+ClassPreceptor.belongsTo(User, { foreignKey: 'preceptor_id', as: 'preceptor' });
 
 // Permissions
 Entity.hasMany(Permission, { foreignKey: 'entity_id', as: 'permissions' });

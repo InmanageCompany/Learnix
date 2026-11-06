@@ -71,7 +71,7 @@ function HomeTeacher() {
         <p>Gestione sus clases y calificaciones aquí.</p>
 
         <CoursesList courses={courses} subjects={subjects} />
-
+        {/* Comentario 
         <Button
           variant="contained"
           onClick={() => modalRef.current.showModal()}
@@ -79,7 +79,7 @@ function HomeTeacher() {
         >
           Ingresar código
         </Button>
-
+        */}
         <dialog ref={modalRef}>
           <h3>Código de clase</h3>
           <input

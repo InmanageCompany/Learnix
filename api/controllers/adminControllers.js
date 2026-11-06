@@ -19,7 +19,7 @@ const createRole = async (req, res, next) => {
 
     const role = await Role.create({ name: lowerCaseName });
     
-    req.create = role,
+    req.create = role;
     req.result = { message: 'Rol creado correctamente', role };
 
     //res.status(201).json({ message: 'Rol creado correctamente', role});
@@ -46,7 +46,7 @@ const roleList = async (req, res) => {
 }
 
 // Crear usuario
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
   try {
     const { role_id, name, date_of_birth, phone, cuil, tuition, email } = req.body;
 
@@ -76,7 +76,11 @@ const createUser = async (req, res) => {
       email
     });
 
-    res.status(201).json({ message: `Usuario creado correctamente con rol '${role.name}'`, user });
+    req.create = user;
+    req.result = { message: `Usuario creado correctamente con rol '${role.name}'`, user }
+
+    //res.status(201).json({ message: `Usuario creado correctamente con rol '${role.name}'`, user });
+    next();
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: 'Error interno del servidor', error: err.message });
