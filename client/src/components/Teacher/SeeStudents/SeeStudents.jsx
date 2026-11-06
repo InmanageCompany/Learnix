@@ -39,10 +39,8 @@ function SeeStudents() {
 
       else
         alert(`Error: ${error.message}`);
-    } finally {
-      setStudentsLoaded(true);
-    }
-  }, [ClassSection_id, token]);
+    } 
+  }, [ClassSection_id, token, sel_periods, Sid]);
 
   const Periods = useCallback(async () => {
     try {
@@ -53,7 +51,7 @@ function SeeStudents() {
       );
 
       SetPeriods(response.data);
-      SetSel_periods(response.data[0].id);
+      if (response.data.length > 0) SetSel_periods(response.data[0].id);
     } catch (error) {
       if (error.response)
         alert(error.response.data.message);
