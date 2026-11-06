@@ -5,11 +5,12 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import logoLearnix from "../../../assets/logo-learnix1.png";
+import useGradeNotifications from "./useGradeNotifications";
 
 function NavBarStudent() {
   const navigate = useNavigate();
   const [notificationsAnchor, setNotificationsAnchor] = useState(null);
-  const notifications = [];
+  const { notifications, checkingError, markAsRead } = useGradeNotifications();
   const unreadCount = notifications.filter((notification) => !notification.read).length;
 
   return (
@@ -68,9 +69,8 @@ function NavBarStudent() {
           <h2>Notificaciones</h2>
           {notifications.length === 0 ? (
             <p className="role-notifications-empty">
-              Todavía no hay notificaciones disponibles. Los avisos sobre boletines
-              y actualizaciones aparecerán aquí cuando Learnix disponga de una
-              fuente de notificaciones.
+              {checkingError || "Te avisaremos cuando se agregue o modifique una nota."}
+              {" "}Learnix revisa cambios mientras esta sesión está abierta.
             </p>
           ) : (
             <ul className="role-notifications-list">
@@ -81,7 +81,28 @@ function NavBarStudent() {
                 >
                   <strong>{notification.title}</strong>
                   <p>{notification.message}</p>
-                  {notification.createdAt && <time>{notification.createdAt}</time>}
+                  <div className="student-notification-actions">
+                    <time dateTime={notification.createdAt}>
+                      {new Date(notification.createdAt).toLocaleString()}
+                    </time>
+                    <Button
+                      component={Link}
+                      to={`/student/notes/${notification.reportCardId}`}
+                      state={{ Report_Card_id: notification.reportCardId }}
+                      size="small"
+                      onClick={() => {
+                        markAsRead(notification.id);
+                        setNotificationsAnchor(null);
+                      }}
+                    >
+                      Ver nota
+                    </Button>
+                    {!notification.read && (
+                      <Button size="small" onClick={() => markAsRead(notification.id)}>
+                        Marcar leída
+                      </Button>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { Button, Select, MenuItem } from '@mui/material';
+import { useLocation, useNavigate } from "react-router-dom";
+import { Alert, Button, Select, MenuItem } from '@mui/material';
 import axios from "axios";
 import NavBarTeacher from '../NavBar/NavBar';
 
@@ -8,6 +8,7 @@ import NavBarTeacher from '../NavBar/NavBar';
 function ModNotes() {
 
     const [seeNotes, setSeeNotes] = useState([]);
+    const [updateMessage, setUpdateMessage] = useState("");
 
     const [notes, setNotes] = useState({});
     const [comment, SetComentario] = useState({});
@@ -17,6 +18,7 @@ function ModNotes() {
     const token = localStorage.getItem("token")
 
     const location = useLocation();
+    const navigate = useNavigate();
     const state = location.state || {};
     const students = state.alumnos;
     const subject_id = state.subject_id;
@@ -60,8 +62,9 @@ function ModNotes() {
                 }
             );
 
-            alert(response.data.message);
-
+            setUpdateMessage(response.data.message || "La nota se modificó correctamente.");
+            setNotes((current) => ({ ...current, [grade_id]: "" }));
+            SetComentario((current) => ({ ...current, [grade_id]: "" }));
             await List();
         } catch (error) {
             if (error.response)
@@ -84,6 +87,38 @@ function ModNotes() {
             <NavBarTeacher />
             <div className="teacher-page">
                 <h1>Modficar notas de los alumnos</h1>
+
+                {updateMessage && (
+                    <Alert
+                        severity="success"
+                        sx={{
+                            mb: 2,
+                            alignItems: "center",
+                            textAlign: "left",
+                            "& .MuiAlert-message": { flex: 1 }
+                        }}
+                        action={
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                                <Button
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => setUpdateMessage("")}
+                                >
+                                    Seguir editando
+                                </Button>
+                                <Button
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => navigate(-1)}
+                                >
+                                    Volver a alumnos
+                                </Button>
+                            </div>
+                        }
+                    >
+                        {updateMessage}
+                    </Alert>
+                )}
 
                 {seeNotes.length === 0 ? (
                     <h1> No hay notas cargadas para modficar </h1>

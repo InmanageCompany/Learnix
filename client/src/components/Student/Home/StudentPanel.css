@@ -1,0 +1,498 @@
+.student-dashboard {
+  width: min(100% - 3rem, 1120px);
+  margin: clamp(1.5rem, 4vw, 2.5rem) auto;
+}
+
+.student-home-dashboard {
+  width: min(100% - 3rem, 1120px);
+  margin: clamp(1.5rem, 4vw, 2.5rem) auto;
+}
+
+.student-home-image {
+  display: flex;
+  width: 100%;
+  min-height: 300px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  overflow: hidden;
+  margin: 0;
+  text-align: left;
+  box-shadow: 0 14px 36px rgba(0, 54, 118, 0.16);
+}
+
+.student-home-content {
+  position: relative;
+  z-index: 1;
+  max-width: 650px;
+}
+
+.student-home-eyebrow {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: #a8d7ff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.student-home-image h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.student-home-image p {
+  max-width: 540px;
+  margin: 1rem 0 1.5rem;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.student-home-image .student-home-button {
+  min-height: 46px;
+  padding: 0.65rem 1.1rem;
+  border-radius: 9px;
+  background: #168fe5;
+  font-weight: 600;
+}
+
+.student-home-image .student-home-button:hover {
+  background: #0876c4;
+}
+
+.student-home-reports {
+  margin-top: 1.5rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid #e3eaf2;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 26px rgba(31, 41, 55, 0.06);
+}
+
+.student-home-reports-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+}
+
+.student-home-reports-eyebrow {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #168fe5;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+}
+
+.student-home-reports-heading h2 {
+  margin: 0;
+  color: #00489a;
+  font-size: clamp(1.35rem, 3vw, 1.7rem);
+  font-weight: 700;
+}
+
+.student-home-reports-heading p {
+  margin: 0.4rem 0 0;
+  color: #6b7280;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.student-home-report-count {
+  flex: 0 0 auto;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #d5e8f8;
+  border-radius: 999px;
+  background: #f0f8ff;
+  color: #00489a;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.student-home-reports .reportCard-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.student-home-reports .student-report-card {
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid #e3eaf2;
+  border-radius: 12px;
+  background: #fbfdff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.student-home-reports .student-report-card:hover {
+  transform: translateY(-2px);
+  border-color: #b7d8f6;
+  box-shadow: 0 8px 18px rgba(31, 41, 55, 0.07);
+}
+
+.student-home-reports-status {
+  margin: 0;
+  padding: 1.25rem;
+  border-radius: 10px;
+  background: #f7faff;
+  color: #6b7280;
+  text-align: center;
+}
+
+.student-dashboard-hero {
+  position: relative;
+  display: flex;
+  min-height: 300px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  overflow: hidden;
+  padding: clamp(2rem, 5vw, 3.5rem);
+  border-radius: 18px;
+  background:
+    linear-gradient(110deg, rgba(0, 44, 99, 0.94), rgba(0, 72, 154, 0.82)),
+    url("../../../assets/fondo-clase.jpg") center 48% / cover;
+  box-shadow: 0 14px 36px rgba(0, 54, 118, 0.16);
+  color: #fff;
+}
+
+.student-dashboard-hero::after {
+  position: absolute;
+  right: 12%;
+  bottom: -180px;
+  width: 390px;
+  height: 390px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.student-dashboard-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+}
+
+.student-dashboard-eyebrow {
+  display: block;
+  margin-bottom: 0.7rem;
+  color: #168fe5;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.student-dashboard-hero .student-dashboard-eyebrow {
+  color: #a8d7ff;
+}
+
+.student-dashboard-hero h1 {
+  max-width: 600px;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.12;
+}
+
+.student-dashboard-hero p {
+  max-width: 540px;
+  margin: 1rem 0 1.5rem;
+  color: #e2edf8;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.student-dashboard-hero .MuiButton-root {
+  min-height: 46px;
+  padding: 0.65rem 1.1rem;
+  border-radius: 9px;
+  background: #168fe5;
+  font-weight: 600;
+}
+
+.student-dashboard-hero .MuiButton-root:hover {
+  background: #0876c4;
+}
+
+.student-dashboard-highlight {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 175px;
+  min-height: 150px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  backdrop-filter: blur(7px);
+  text-align: center;
+}
+
+.student-dashboard-highlight .MuiSvgIcon-root {
+  font-size: 2.8rem;
+}
+
+.student-dashboard-highlight span {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.student-dashboard-section {
+  margin-top: 2.5rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid #e5ebf2;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 5px 20px rgba(31, 41, 55, 0.045);
+}
+
+.student-dashboard-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.student-dashboard-section-heading .student-dashboard-eyebrow {
+  margin-bottom: 0.35rem;
+}
+
+.student-dashboard-section-heading h2,
+.student-dashboard-page-heading h1 {
+  margin: 0;
+  color: #00489a;
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: 700;
+}
+
+.student-dashboard-count {
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: #edf5fd;
+  color: #00489a;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.student-dashboard-status {
+  margin: 1rem 0;
+  color: #6b7280;
+}
+
+.student-dashboard-page-heading {
+  margin-bottom: 1.5rem;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  border-radius: 16px;
+  background: linear-gradient(115deg, #edf5fd, #f8fbff);
+}
+
+.student-dashboard-page-heading p {
+  margin: 0.55rem 0 0;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.student-notes-page {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid #e5ebf2;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 5px 20px rgba(31, 41, 55, 0.045);
+}
+
+.student-notes-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  border-radius: 14px;
+  background: linear-gradient(115deg, #edf5fd, #f8fbff);
+}
+
+.student-notes-hero h1 {
+  margin: 0;
+  color: #00489a;
+  font-size: clamp(1.6rem, 3vw, 2rem);
+}
+
+.student-notes-hero p {
+  margin: 0.55rem 0 0;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.student-notes-hero .MuiButton-root {
+  flex: 0 0 auto;
+}
+
+.student-grade-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.student-grade-card {
+  min-width: 0;
+  padding: 1.25rem;
+  border: 1px solid #e3eaf2;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(31, 41, 55, 0.045);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.student-grade-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(31, 41, 55, 0.08);
+}
+
+.student-grade-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.student-grade-label {
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.student-grade-card h2 {
+  margin: 1rem 0 0.4rem;
+  color: #00489a;
+  font-size: 1.2rem;
+}
+
+.student-grade-comment {
+  min-height: 2.8em;
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.student-grade-value-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid #edf0f5;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.student-grade-card-top .student-grade-value-row {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.student-grade-card-top .student-grade-value-row strong {
+  min-width: 48px;
+  min-height: 42px;
+  font-size: 1.15rem;
+}
+
+.student-grade-value-row strong {
+  display: grid;
+  min-width: 42px;
+  min-height: 38px;
+  place-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 10px;
+  background: #eaf5ff;
+  color: #00489a;
+  font-size: 1rem;
+}
+
+@media (max-width: 700px) {
+  .student-dashboard {
+    width: calc(100% - 1.5rem);
+  }
+
+  .student-home-image {
+    min-height: 300px;
+  }
+
+  .student-home-dashboard {
+    width: calc(100% - 1.5rem);
+  }
+
+  .student-dashboard-hero {
+    min-height: auto;
+  }
+
+  .student-dashboard-highlight {
+    display: none;
+  }
+
+  .student-grade-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .student-home-image {
+    min-height: 270px;
+    padding: 1.5rem;
+  }
+
+  .student-home-reports-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .student-home-reports .reportCard-list {
+    grid-template-columns: 1fr;
+  }
+
+  .student-home-image h1 {
+    font-size: 1.8rem;
+  }
+
+  .student-home-image p {
+    font-size: 0.9rem;
+  }
+
+  .student-dashboard-section-heading,
+  .student-notes-hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .student-dashboard-hero {
+    padding: 1.5rem;
+  }
+
+  .student-dashboard-hero h1 {
+    font-size: 1.8rem;
+  }
+
+  .student-dashboard-hero p {
+    font-size: 0.9rem;
+  }
+
+  .student-notes-hero .MuiButton-root {
+    width: 100%;
+  }
+}

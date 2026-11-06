@@ -188,8 +188,23 @@ a:hover {
 
 .role-notification-item time {
   display: block;
-  margin-top: 0.5rem;
+  align-self: center;
   color: var(--text-light);
+  font-size: 0.75rem;
+}
+
+.student-notification-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem;
+  margin-top: 0.35rem;
+}
+
+.student-notification-actions .MuiButton-root {
+  min-width: 0;
+  padding: 0.25rem 0.5rem;
   font-size: 0.75rem;
 }
 
@@ -344,6 +359,37 @@ button.MuiButton-contained:hover {
 
 .teacher-page {
   border: 1px solid #e6ebf2;
+}
+
+.student-home-image {
+  position: relative;
+  isolation: isolate;
+  background-image: url("./assets/fondo-clase.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+}
+
+.student-home-image::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 22, 38, 0.5),
+    rgba(8, 22, 38, 0.5)
+  );
+  content: "";
+  pointer-events: none;
+}
+
+.student-home-image h1 {
+  color: #fff;
+}
+
+.student-home-image p {
+  color: #e1e7ef;
 }
 
 .teacher-page > h1 {
