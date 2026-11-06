@@ -3,7 +3,7 @@ import './App.css'
 
 import { Home, Login, Register, Profile, Footer } from './components/General'
 
-import { HomeAdmin } from './components/Admin'
+import { HomeAdmin, UsersAdmin } from './components/Admin'
 
 import { HomeRector } from './components/Rector'
 
@@ -24,6 +24,7 @@ function App() {
 
           {/* ADMIN */}
           <Route path='/admin/home' element={<HomeAdmin />} />
+          <Route path='/admin/users' element={<UsersAdmin />} />
 
           {/* RECTOR */}
           <Route path='/rector/home' element={<HomeRector />} />

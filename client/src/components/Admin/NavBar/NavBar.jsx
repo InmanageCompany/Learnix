@@ -11,6 +11,9 @@ function NavBarAdmin() {
         <Button color="inherit" component={Link} to="/admin/home" sx={{ textTransform: "none", fontWeight: 500 }}>
           Home Admin
         </Button>
+        <Button color="inherit" component={Link} to="/admin/users" sx={{ textTransform: "none", fontWeight: 500 }}>
+          Users
+        </Button>
         <AccountCircleIcon fontSize="large" sx={{ cursor: "pointer" }} onClick={() => navigate("/profile")} />
       </Toolbar>
     </AppBar>

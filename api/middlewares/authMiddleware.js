@@ -32,6 +32,9 @@ async function verifyToken(req, res, next) {
             if (!user)
                 return res.status(404).json({ message: 'Usuario no encontrado' });
 
+            if (!user.isActive)
+                return res.status(403).json({ message: 'Usuario suspendido. Contacte al administrador.' });
+
             req.user = {
                 id: user.id,
                 email: user.email,

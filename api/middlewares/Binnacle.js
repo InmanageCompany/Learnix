@@ -15,18 +15,18 @@ async function BitacoraMiddleware(req, res) {
         console.log(req.user.id)
 
         const filtered = Object.fromEntries(
-            Object.entries(old_value).filter(([key]) => 
+            Object.entries(old_value).filter(([key]) =>
                 facts && Object.keys(facts).includes(key)
             )
         );
-        
+
 
         let payload = {
             responsible_id: req.user.id,
             table: table,
             action: method
         };
- 
+
         payload.entity_id = (
             method == "post" || method == "delete"
                 ? facts.id
@@ -67,42 +67,49 @@ async function BitacoraMiddleware(req, res) {
 }
 //)}
 async function Prepare_bitacora(req, res, next) {
-    const table_name = req.table;
-    const method = req.method.toLowerCase();
-    const create = req.create; //Este valor lo manda despues el controlador POST ya que prepare va despues
-    const { idD } = req.params || {};
-    const { idU } = req.body || {};
+    try {
+        const table_name = req.table;
+        const method = req.method.toLowerCase();
+        const create = req.create; // Lo manda el controlador POST, porque Prepare va después
+        const { idD } = req.params || {};
+        const { idU } = req.body || {};
 
-    const model = models[table_name];
-    if (!model) return res.json({ message: `No existe el modelo Sequelize '${model}'` });
+        const model = models[table_name];
+        if (!model) return res.json({ message: `No existe el modelo Sequelize '${table_name}'` });
 
-    let facts;
-    let verif =
-        method === "delete"
-            ? idD
-            : method === "put"
-                ? (idU || req.user.id)
-                : null;
+        let facts;
+        const verif =
+            method === "delete"
+                ? idD
+                : method === "put"
+                    ? (idU || req.user.id)
+                    : null;
 
+        if (verif) {
+            const record = await model.findByPk(verif);
+            if (!record) return res.json({ message: `Registro no encontrado en '${table_name}' con ID ${verif}` });
 
-    if (verif) {
-        const record = await model.findByPk(verif);
-        if (!record) return res.json({ message: `Registro no encontrado en '${modelName}' con ID ${verif}` });
-        
-        
-        if(method == "put"){
-            req.old_value = record.toJSON();
-            req.verif = verif;
+            const data = record.toJSON();
+            delete data.password; // la contraseña nunca va a la bitácora
+
+            if (method == "put") {
+                req.old_value = data;
+                req.verif = verif;
+            }
+            else facts = data;
         }
-        else facts = record.toJSON();
-    }
 
-    if (method == "post") {
-        facts = create.toJSON();
-    }
+        if (method == "post") {
+            // Acepta una instancia de Sequelize o un objeto plano
+            facts = typeof create?.toJSON === "function" ? create.toJSON() : create;
+        }
 
-    req.facts = facts || {};
-    next();
+        req.facts = facts || {};
+        next();
+    } catch (err) {
+        console.error("Error en Prepare_bitacora:", err);
+        return res.status(500).json({ message: 'Error al preparar la bitácora', error: err.message });
+    }
 }
 
 // ===================== Exportaciones =====================

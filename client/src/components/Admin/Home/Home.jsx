@@ -11,16 +11,19 @@ function HomeAdmin() {
   }, []);
 
   const fetchUsers = async () => {
-    const response = await axios.get("http://localhost:3000/api/admin/users",
-      {
-        headers: {
-          Authorization: token
-        }
-      }
-    );
-
-    console.log(response.data);
-    setActivos(response.data.cantidadActivos);
+    try {
+      const response = await axios.get("http://localhost:3000/api/admin/getUsers",
+        { headers: { Authorization: token } }
+      );
+      setActivos(response.data.cantidadActivos);
+    } catch (error) {
+      if (error.response)
+        alert(error.response.data.message);
+      else if (error.request)
+        alert("No hay respuesta del servidor.");
+      else
+        alert(`Error: ${error.message}`);
+    }
   };
 
   return (
