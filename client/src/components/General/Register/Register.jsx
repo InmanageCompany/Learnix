@@ -33,7 +33,7 @@ function Register() {
         );
 
         setSchools(response.data);
-      } catch (error) {
+      } catch {
         alert("No se pudieron cargar las escuelas.");
       }
     };
@@ -167,107 +167,99 @@ function Register() {
             className="login-form register-form"
             onSubmit={fetchRegister}
           >
-            <label htmlFor="register-name">
-              Nombre completo
-            </label>
+            <div className="register-field">
+              <label htmlFor="register-name">Nombre completo</label>
+              <input
+                id="register-name"
+                type="text"
+                placeholder="Ingresá tu nombre completo"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                autoComplete="name"
+                required
+              />
+            </div>
 
-            <input
-              id="register-name"
-              type="text"
-              placeholder="Ingresá tu nombre completo"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              autoComplete="name"
-              required
-            />
+            <div className="register-field">
+              <label htmlFor="register-school">Institución educativa</label>
+              <select
+                id="register-school"
+                value={school_id}
+                onChange={(e) => setSchool_id(e.target.value)}
+                required
+              >
+                <option value="">Seleccioná una escuela</option>
+                {schools.map((school) => (
+                  <option key={school.id} value={school.id}>
+                    {school.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            <label htmlFor="register-school">
-              Institución educativa
-            </label>
+            <div className="register-field">
+              <label htmlFor="register-birth">Fecha de nacimiento</label>
+              <input
+                id="register-birth"
+                type="date"
+                value={date_of_birth}
+                onChange={(e) => setDate_of_birth(e.target.value)}
+                autoComplete="bday"
+                required
+              />
+            </div>
 
-            <select
-              id="register-school"
-              value={school_id}
-              onChange={(e) => setSchool_id(e.target.value)}
-              required
-            >
-              <option value="">Seleccioná una escuela</option>
+            <div className="register-field">
+              <label htmlFor="register-phone">Teléfono</label>
+              <input
+                id="register-phone"
+                type="tel"
+                placeholder="Ingresá tu teléfono"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                autoComplete="tel"
+                required
+              />
+            </div>
 
-              {schools.map((school) => (
-                <option key={school.id} value={school.id}>
-                  {school.name}
-                </option>
-              ))}
-            </select>
+            <div className="register-field">
+              <label htmlFor="register-cuil">CUIL</label>
+              <input
+                id="register-cuil"
+                type="text"
+                placeholder="Ingresá tu CUIL"
+                value={cuil}
+                onChange={(e) => setCuil(e.target.value)}
+                inputMode="numeric"
+                required
+              />
+            </div>
 
-            <label htmlFor="register-birth">
-              Fecha de nacimiento
-            </label>
+            <div className="register-field">
+              <label htmlFor="register-email">Correo electrónico</label>
+              <input
+                id="register-email"
+                type="email"
+                placeholder="Ingresá tu correo electrónico"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                required
+              />
+            </div>
 
-            <input
-              id="register-birth"
-              type="date"
-              value={date_of_birth}
-              onChange={(e) => setDate_of_birth(e.target.value)}
-              autoComplete="bday"
-              required
-            />
-
-            <label htmlFor="register-phone">
-              Teléfono
-            </label>
-
-            <input
-              id="register-phone"
-              type="tel"
-              placeholder="Ingresá tu teléfono"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              autoComplete="tel"
-              required
-            />
-
-            <label htmlFor="register-cuil">
-              CUIL
-            </label>
-
-            <input
-              id="register-cuil"
-              type="text"
-              placeholder="Ingresá tu CUIL"
-              value={cuil}
-              onChange={(e) => setCuil(e.target.value)}
-              inputMode="numeric"
-              required
-            />
-
-            <label htmlFor="register-email">
-              Correo electrónico
-            </label>
-
-            <input
-              id="register-email"
-              type="email"
-              placeholder="Ingresá tu correo electrónico"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              required
-            />
-
-            <label htmlFor="register-password">
-              Contraseña
-            </label>
-
-            <input
-              id="register-password"
-              type="password"
-              placeholder="Creá una contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="new-password"
-              required
-            />
+            <div className="register-field register-field-full">
+              <label htmlFor="register-password">Contraseña</label>
+              <input
+                id="register-password"
+                type="password"
+                placeholder="Creá una contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="new-password"
+                required
+              />
+            </div>
 
             <Button
               type="submit"

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Button, Select, MenuItem } from '@mui/material';
 import axios from "axios";
 import NavBarTeacher from '../NavBar/NavBar';
@@ -11,7 +11,8 @@ function AddNotes() {
   const [notes, setNotes] = useState({});
   
   const [comment, SetComentario] = useState({});
-  const [conceptual, SetConceptual] = useState(["En proceso", "Suficiente", "Avanzado"]);
+  const [conceptual] = useState(["En proceso", "Suficiente", "Avanzado"]);
+  const numericGrades = Array.from({ length: 10 }, (_, index) => index + 1);
   const token = localStorage.getItem("token")
 
   const location = useLocation();
@@ -19,7 +20,7 @@ function AddNotes() {
   const students = state.alumnos;
   const subject_id = state.subject_id;
 
-  const List = async () => {
+  const List = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:3000/api/teacher/periods`,
         {
@@ -38,7 +39,7 @@ function AddNotes() {
       else
         alert(`Error: ${error.message}`);
     }
-  };
+  }, [token]);
 
   const Grades = async (user_id) => {
     try {
@@ -69,7 +70,7 @@ function AddNotes() {
 
   useEffect(() => {
     List();
-  }, []);
+  }, [List]);
 
 
   return (
@@ -133,12 +134,24 @@ function AddNotes() {
                         }
                       </Select>
                     ) : (
-                      <input type="text" placeholder="Numero" onChange={(e) =>
-                        setNotes({
-                          ...notes,
-                          [item.id]: e.target.value
-                        })
-                      } />
+                      <Select
+                        value={notes[item.id] ?? ""}
+                        displayEmpty
+                        inputProps={{ "aria-label": `Nota de ${item.name}` }}
+                        onChange={(e) =>
+                          setNotes({
+                            ...notes,
+                            [item.id]: e.target.value
+                          })
+                        }
+                      >
+                        <MenuItem value="" disabled>Elegir nota</MenuItem>
+                        {numericGrades.map((grade) => (
+                          <MenuItem key={grade} value={String(grade)}>
+                            {grade}
+                          </MenuItem>
+                        ))}
+                      </Select>
                     )}
                   </th>
                   <th>

@@ -9,7 +9,7 @@ import { HomeRector } from './components/Rector'
 
 import { HomeStudent, LoginStudent, ReportCards, SeeNotes } from './components/Student'
 
-import { SeeStudents, AddNotes, ModNotes, HomeTeacher } from './components/Teacher'
+import { SeeStudents, AddNotes, ModNotes, HomeTeacher, ViewNotes } from './components/Teacher'
 
 function App() {
   return (
@@ -38,6 +38,7 @@ function App() {
           <Route path='/teacher/students/:ClassSection_id' element={<SeeStudents />} />
           <Route path='/teacher/notes/add' element={<AddNotes />} />
           <Route path='/teacher/notes/mod' element={<ModNotes />} />
+          <Route path='/teacher/notes/view' element={<ViewNotes />} />
 
           {/* 404 */}
           <Route path='*' element={<div><h1>404 Not found</h1></div>} />
