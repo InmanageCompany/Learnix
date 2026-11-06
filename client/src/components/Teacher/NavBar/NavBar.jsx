@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Button, IconButton, Tooltip, Popover, Badge } from "@mui/material";
+import { AppBar, Toolbar, Button, IconButton, Tooltip, Popover } from "@mui/material";
 import { Link } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
@@ -10,7 +10,6 @@ function NavBarTeacher() {
   const navigate = useNavigate();
   const [notificationsAnchor, setNotificationsAnchor] = useState(null);
   const notifications = [];
-  const unreadCount = notifications.filter((notification) => !notification.read).length;
 
   return (
     <AppBar position="static" className="role-navbar">
@@ -36,9 +35,7 @@ function NavBarTeacher() {
               aria-expanded={Boolean(notificationsAnchor)}
               onClick={(event) => setNotificationsAnchor(event.currentTarget)}
             >
-              <Badge badgeContent={unreadCount} color="error">
-                <NotificationsOutlinedIcon />
-              </Badge>
+              <NotificationsOutlinedIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Perfil">
@@ -66,8 +63,7 @@ function NavBarTeacher() {
           {notifications.length === 0 ? (
             <p className="role-notifications-empty">
               Todavía no hay notificaciones disponibles. Los avisos sobre notas,
-              modificaciones y actualizaciones aparecerán aquí cuando Learnix
-              disponga de una fuente de notificaciones.
+              modificaciones y actualizaciones aparecerán aquí.
             </p>
           ) : (
             <ul className="role-notifications-list">
@@ -77,7 +73,7 @@ function NavBarTeacher() {
                   className={`role-notification-item ${notification.read ? "is-read" : "is-unread"}`}
                 >
                   <strong>{notification.title}</strong>
-                  <p>{notification.message}</p>
+                  <span>{notification.message}</span>
                   {notification.createdAt && <time>{notification.createdAt}</time>}
                 </li>
               ))}

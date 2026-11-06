@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Button, IconButton, Tooltip, Popover, Badge } from "@mui/material";
+import { AppBar, Toolbar, Button, IconButton, Tooltip, Popover } from "@mui/material";
 import { Link } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
@@ -11,7 +11,6 @@ function NavBarStudent() {
   const navigate = useNavigate();
   const [notificationsAnchor, setNotificationsAnchor] = useState(null);
   const { notifications, checkingError, markAsRead } = useGradeNotifications();
-  const unreadCount = notifications.filter((notification) => !notification.read).length;
 
   return (
     <AppBar position="static" className="role-navbar">
@@ -40,9 +39,7 @@ function NavBarStudent() {
               aria-expanded={Boolean(notificationsAnchor)}
               onClick={(event) => setNotificationsAnchor(event.currentTarget)}
             >
-              <Badge badgeContent={unreadCount} color="error">
-                <NotificationsOutlinedIcon />
-              </Badge>
+              <NotificationsOutlinedIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Perfil">
@@ -79,30 +76,18 @@ function NavBarStudent() {
                   key={notification.id}
                   className={`role-notification-item ${notification.read ? "is-read" : "is-unread"}`}
                 >
-                  <strong>{notification.title}</strong>
-                  <p>{notification.message}</p>
-                  <div className="student-notification-actions">
-                    <time dateTime={notification.createdAt}>
-                      {new Date(notification.createdAt).toLocaleString()}
-                    </time>
-                    <Button
-                      component={Link}
-                      to={`/student/notes/${notification.reportCardId}`}
-                      state={{ Report_Card_id: notification.reportCardId }}
-                      size="small"
-                      onClick={() => {
-                        markAsRead(notification.id);
-                        setNotificationsAnchor(null);
-                      }}
-                    >
-                      Ver nota
-                    </Button>
-                    {!notification.read && (
-                      <Button size="small" onClick={() => markAsRead(notification.id)}>
-                        Marcar leída
-                      </Button>
-                    )}
-                  </div>
+                  <Link
+                    className={`role-notification-link ${notification.read ? "is-read" : "is-unread"}`}
+                    to={`/student/notes/${notification.reportCardId}`}
+                    state={{ Report_Card_id: notification.reportCardId }}
+                    onClick={() => {
+                      markAsRead(notification.id);
+                      setNotificationsAnchor(null);
+                    }}
+                  >
+                    <strong>{notification.title}</strong>
+                    <span>{notification.message}</span>
+                  </Link>
                 </li>
               ))}
             </ul>

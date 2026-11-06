@@ -129,82 +129,90 @@ a:hover {
 }
 
 .role-notifications-popover .MuiPaper-root {
-  width: min(380px, calc(100vw - 24px));
+  width: min(300px, calc(100vw - 24px));
   margin-top: 0.5rem;
   border: 1px solid #e6ebf2;
-  border-radius: var(--radius);
-  box-shadow: 0 12px 32px rgba(31, 41, 55, 0.16);
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(31, 41, 55, 0.1);
 }
 
 .role-notifications-panel {
-  padding: 1.25rem;
+  padding: 0.9rem 1rem;
 }
 
 .role-notifications-panel h2 {
   color: var(--blue-primary);
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .role-notifications-empty {
-  margin: 0.9rem 0 0;
+  margin: 0.5rem 0 0;
   color: var(--text-light);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   line-height: 1.6;
 }
 
 .role-notifications-list {
-  display: grid;
-  gap: 0.5rem;
-  margin: 1rem 0 0;
+  margin: 0.5rem 0 0;
   padding: 0;
   list-style: none;
 }
 
 .role-notification-item {
-  padding: 0.85rem;
-  border-radius: 9px;
-  border: 1px solid #e6ebf2;
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #edf0f5;
   text-align: left;
 }
 
-.role-notification-item.is-unread {
-  border-left: 3px solid var(--blue-accent);
-  background: #f3f8fe;
+.role-notification-item:last-child {
+  border-bottom: 0;
 }
 
-.role-notification-item.is-read {
-  color: var(--text-light);
-  background: #fff;
+.role-notification-link {
+  display: grid;
+  width: 100%;
+  gap: 0.15rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #edf0f5;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-dark);
+  text-align: left;
 }
 
-.role-notification-item strong {
+.role-notification-link:hover {
+  background: transparent;
   color: var(--text-dark);
 }
 
-.role-notification-item p {
-  margin: 0.3rem 0 0;
-  font-size: 0.875rem;
+.role-notification-item.is-unread strong,
+.role-notification-link:not(.is-read) strong {
+  font-weight: 700;
+}
+
+.role-notification-item strong,
+.role-notification-link strong {
+  color: var(--text-dark);
+  font-size: 0.85rem;
+}
+
+.role-notification-item > span,
+.role-notification-link > span {
+  color: var(--text-light);
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.45;
+  text-transform: none;
+}
+
+.role-notification-link.is-read strong {
+  font-weight: 500;
 }
 
 .role-notification-item time {
-  display: block;
-  align-self: center;
   color: var(--text-light);
-  font-size: 0.75rem;
-}
-
-.student-notification-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.25rem;
-  margin-top: 0.35rem;
-}
-
-.student-notification-actions .MuiButton-root {
-  min-width: 0;
-  padding: 0.25rem 0.5rem;
   font-size: 0.75rem;
 }
 
