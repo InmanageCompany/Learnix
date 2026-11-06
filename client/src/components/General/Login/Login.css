@@ -1,0 +1,339 @@
+
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  background: #ededed;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* PANEL IZQUIERDO */
+
+.login-page .login-presentation {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 100vh;
+  padding: 50px;
+  box-sizing: border-box;
+  color: #fff;
+  background-image: var(--login-bg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* CAPA OSCURA IGUAL AL HOME */
+
+.login-page .login-presentation::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 22, 38, 0.5),
+    rgba(8, 22, 38, 0.5)
+  );
+}
+
+/* LOGO */
+
+.login-page .login-brand {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.login-page .login-brand img {
+  display: block;
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}
+
+/* TEXTO SOBRE LA IMAGEN */
+
+.login-page .login-presentation-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 540px;
+  margin: auto;
+}
+
+.login-page .login-presentation-content h1 {
+  max-width: 480px;
+  margin: 0 0 18px;
+  color: #fff;
+  font-size: clamp(32px, 3.2vw, 44px);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.login-page .login-presentation-content > p {
+  max-width: 470px;
+  margin: 0 0 34px;
+  color: #e1e7ef;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* TARJETAS */
+
+.login-page .login-benefits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.login-page .login-benefits article {
+  min-width: 0;
+  padding: 18px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 7px;
+  background: rgba(8, 15, 25, 0.68);
+  color: #fff;
+  backdrop-filter: blur(5px);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.login-page .login-benefits article:hover {
+  transform: translateY(-3px);
+  background: rgba(8, 15, 25, 0.82);
+}
+
+.login-page .login-benefits strong {
+  display: block;
+  margin-bottom: 9px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.login-page .login-benefits span {
+  display: block;
+  color: #e2e8f0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* PANEL DERECHO */
+
+.login-page .login-form-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 100vh;
+  padding: 50px;
+  box-sizing: border-box;
+  background: #ededed;
+}
+
+.login-page .login-form-wrapper {
+  width: 100%;
+  max-width: 410px;
+}
+
+/* TÍTULO */
+
+.login-page .login-form-heading {
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+.login-page .login-form-heading h2 {
+  margin: 0 0 12px;
+  color: #159de0;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.login-page .login-form-heading p {
+  margin: 0;
+  color: #555;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* CAMPOS */
+
+.login-page .login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.login-page .login-form label {
+  margin: 0 0 9px;
+  color: #333;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.login-page .login-form input {
+  width: 100%;
+  height: 50px;
+  box-sizing: border-box;
+  margin: 0 0 24px;
+  padding: 0 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  background: #e1e1e1;
+  color: #333;
+  font-family: inherit;
+  font-size: 15px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.login-page .login-form input::placeholder {
+  color: #999;
+}
+
+.login-page .login-form input:focus {
+  border-color: #159de0;
+  background: #fff;
+}
+
+.login-page .login-password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.login-page .login-password-wrapper input {
+  padding-right: 90px;
+}
+
+.login-page .login-show-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  padding: 6px 0;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #159de0;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-page .login-show-password:hover {
+  color: #107caf;
+}
+
+/* BOTÓN DE INGRESO */
+
+.login-page .login-form button[type="submit"] {
+  min-height: 50px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #159de0;
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.login-page .login-form button[type="submit"]:hover {
+  background: #107caf;
+}
+
+/* VOLVER AL INICIO */
+
+.login-page .login-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin: 26px auto 0;
+  padding: 8px;
+  border: none;
+  background: transparent;
+  color: #159de0;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.login-page .login-back:hover {
+  color: #107caf;
+}
+
+/* CELULARES */
+
+@media (max-width: 700px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .login-page .login-presentation {
+    min-height: 350px;
+    padding: 75px 25px 30px;
+  }
+
+  .login-page .login-presentation-content h1 {
+    font-size: 32px;
+  }
+
+  .login-page .login-presentation-content > p {
+    margin-bottom: 24px;
+    font-size: 15px;
+  }
+
+  .login-page .login-benefits {
+    gap: 9px;
+  }
+
+  .login-page .login-benefits article {
+    padding: 12px 9px;
+  }
+
+  .login-page .login-benefits strong {
+    font-size: 12px;
+  }
+
+  .login-page .login-benefits span {
+    font-size: 11px;
+  }
+
+  .login-page .login-form-section {
+    min-height: auto;
+    padding: 42px 25px;
+  }
+
+  .login-page .login-form-wrapper {
+    max-width: 420px;
+  }
+
+  .login-page .login-form-heading h2 {
+    font-size: 28px;
+  }
+
+  .login-page .login-form-heading p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .login-page .login-benefits {
+    grid-template-columns: 1fr;
+  }
+}

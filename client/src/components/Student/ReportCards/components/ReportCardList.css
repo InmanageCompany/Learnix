@@ -1,4 +1,97 @@
 .reportCard-list {
-  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+  margin: 0;
   padding: 0;
+  list-style: none;
+}
+
+.student-report-empty {
+  display: flex;
+  min-height: 220px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 1px dashed #cbd6e4;
+  border-radius: 14px;
+  background: #fff;
+  text-align: center;
+}
+
+.student-report-empty h2,
+.student-report-empty h3 {
+  margin: 0 0 0.4rem;
+  color: #00489a;
+  font-size: 1.1rem;
+}
+
+.student-report-empty p {
+  max-width: 380px;
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.student-report-list .student-report-card {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #e3eaf2;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(31, 41, 55, 0.045);
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.student-report-list .student-report-card:hover {
+  transform: translateY(-2px);
+  border-color: #b7d8f6;
+  box-shadow: 0 10px 24px rgba(31, 41, 55, 0.08);
+}
+
+.student-report-card-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.student-report-card-content > span {
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.student-report-card-content h3 {
+  overflow: hidden;
+  margin: 0.2rem 0 0;
+  color: #00489a;
+  font-size: 1rem;
+  text-overflow: ellipsis;
+}
+
+.student-report-card .MuiButton-root {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 700px) {
+  .reportCard-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-report-list .student-report-card {
+    flex-wrap: wrap;
+  }
+
+  .student-report-card .MuiButton-root {
+    width: 100%;
+  }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import { Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
@@ -13,12 +13,14 @@ function SeeStudents() {
   const token = localStorage.getItem("token")
   const { ClassSection_id } = useParams()
   const modalRef = useRef(null);
+  const gradePeriodsRef = useRef(null);
 
   const location = useLocation();
   const state = location.state || {};
   const Sid = state.subject_id;
+  const shouldOpenGradePeriods = state.openGradePeriods;
 
-  const Alumns = async () => {
+  const Alumns = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:3000/api/teacher/students/${ClassSection_id}/${Sid}/${sel_periods}`,
         {
@@ -37,10 +39,12 @@ function SeeStudents() {
 
       else
         alert(`Error: ${error.message}`);
+    } finally {
+      setStudentsLoaded(true);
     }
-  };
+  }, [ClassSection_id, token]);
 
-  const Periods = async () => {
+  const Periods = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:3000/api/teacher/periods`,
         {
@@ -60,7 +64,7 @@ function SeeStudents() {
       else
         alert(`Error: ${error.message}`);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     Periods();
@@ -117,6 +121,9 @@ function SeeStudents() {
           Modificar Notas
         </Button>
         <Button component={Link} to={`/teacher/notes/add`} variant="contained" state={{ alumnos: alumns, subject_id: Sid }}> Agregar notas </Button>
+        <Button variant="outlined" onClick={() => gradePeriodsRef.current.showModal()}>
+          Ver notas
+        </Button>
         <dialog ref={modalRef}>
           <h3>Elija un bimestre</h3>
 
@@ -136,6 +143,28 @@ function SeeStudents() {
               {p.name}
             </Button>
           ))}
+        </dialog>
+        <dialog ref={gradePeriodsRef}>
+          <h3>Elegí un período para consultar</h3>
+          {periods.map((p) => (
+            <Button
+              key={p.id}
+              component={Link}
+              to="/teacher/notes/view"
+              variant="contained"
+              state={{ alumnos: alumns, subject_id: Sid, period_id: p.id, period_name: p.name }}
+              sx={{ mt: 2, display: "block", width: "100%" }}
+            >
+              {p.name}
+            </Button>
+          ))}
+          <Button
+            variant="text"
+            onClick={() => gradePeriodsRef.current.close()}
+            sx={{ mt: 1, display: "block", width: "100%" }}
+          >
+            Cerrar
+          </Button>
         </dialog>
       </div>
     </>

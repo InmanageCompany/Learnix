@@ -1,0 +1,180 @@
+.register-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px;
+  background: #f7f9fb;
+}
+
+.register-page .login-presentation {
+  width: 100%;
+  max-width: 920px;
+  min-height: auto;
+  margin: 0 auto 20px;
+  padding: 34px 40px;
+  border-radius: 12px;
+}
+
+.register-page .login-brand {
+  top: 16px;
+  left: 20px;
+}
+
+.register-page .login-presentation-content {
+  max-width: 760px;
+  margin: 26px auto 0;
+  text-align: center;
+}
+
+.register-page .login-presentation-content h1 {
+  max-width: none;
+  margin-bottom: 10px;
+  font-size: clamp(25px, 3vw, 34px);
+}
+
+.register-page .login-presentation-content > p {
+  max-width: 620px;
+  margin: 0 auto 20px;
+}
+
+.register-page .login-benefits {
+  gap: 10px;
+}
+
+.register-page .login-benefits article {
+  padding: 12px;
+}
+
+.register-form-section {
+  width: 100%;
+  max-width: 920px;
+  min-height: auto !important;
+  padding: 34px clamp(20px, 5vw, 64px);
+  border: 1px solid #e6ebf2;
+  border-radius: 12px;
+  background: #fff !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.register-form-wrapper {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.register-form-wrapper .login-form-heading {
+  margin-bottom: 26px;
+}
+
+.register-form {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 22px;
+  row-gap: 2px;
+}
+
+.register-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.register-field-full,
+.register-form > .MuiButton-root {
+  grid-column: 1 / -1;
+}
+
+.register-form input,
+.register-form select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid #d5deea;
+  border-radius: 9px;
+  background-color: #fff;
+  color: #263449;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.register-form input:focus,
+.register-form select:focus {
+  border-color: #19a3eb;
+  box-shadow: 0 0 0 3px rgba(25, 163, 235, 0.14);
+}
+
+.register-form input::placeholder {
+  color: #8995a7;
+}
+
+.register-form select {
+  cursor: pointer;
+}
+
+.register-form input[type="date"] {
+  min-height: 44px;
+}
+
+.register-form label {
+  margin: 4px 0 8px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.register-form .MuiButton-root {
+  margin-top: 14px;
+}
+
+.register-form-wrapper .login-register {
+  margin-top: 22px;
+}
+
+.register-form-wrapper .login-back {
+  margin-top: 14px;
+}
+
+@media (max-width: 768px) {
+  .register-page {
+    padding: 16px;
+  }
+
+  .register-page .login-presentation {
+    padding: 74px 20px 24px;
+  }
+
+  .register-page .login-presentation-content {
+    margin-top: 0;
+  }
+
+  .register-form-section {
+    padding: 28px 22px;
+  }
+
+  .register-form-wrapper {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .register-form {
+    grid-template-columns: 1fr;
+  }
+
+  .register-field-full,
+  .register-form > .MuiButton-root {
+    grid-column: auto;
+  }
+
+  .register-page .login-benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .register-page .login-benefits article {
+    text-align: left;
+  }
+}

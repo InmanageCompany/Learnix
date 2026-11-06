@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Button, Select, MenuItem } from '@mui/material';
 import axios from "axios";
 import NavBarTeacher from '../NavBar/NavBar';
@@ -20,7 +20,7 @@ function AddNotes() {
   const students = state.alumnos;
   const subject_id = state.subject_id;
 
-  const List = async () => {
+  const List = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:3000/api/teacher/periods`,
         {
@@ -39,7 +39,7 @@ function AddNotes() {
       else
         alert(`Error: ${error.message}`);
     }
-  };
+  }, [token]);
 
   const Grades = async (user_id) => {
     try {
@@ -70,7 +70,7 @@ function AddNotes() {
 
   useEffect(() => {
     List();
-  }, []);
+  }, [List]);
 
 
   return (
@@ -135,29 +135,23 @@ function AddNotes() {
                       </Select>
                     ) : (
                       <Select
-                        value={notes[item.id] || ""}
-                        label="Notas"
-                        onChange={(e) =>
-                          setNotes({
-                            ...notes,
-                            [item.id]: e.target.value
-                          })
-                        }
-                      >
-                        {numerica.map((c, i) => (
-                          <MenuItem key={i} value={c}>
-                            {c}
-                          </MenuItem>))
-                        }
-                      </Select>
-                      /*
-                      <input type="text" placeholder="Numero" onChange={(e) =>
+                      value={notes[item.id] || ""}
+                      displayEmpty
+                      inputProps={{ "aria-label": `Nota de ${item.name}` }}
+                      onChange={(e) =>
                         setNotes({
                           ...notes,
                           [item.id]: e.target.value
                         })
-                      } />
-                      */
+                      }
+                    >
+                      <MenuItem value="" disabled>Elegir nota</MenuItem>
+                      {numerica.map((c, i) => (
+                        <MenuItem key={i} value={c}>
+                          {c}
+                        </MenuItem>))
+                      }
+                    </Select>
                     )}
                   </th>
                   <th>

@@ -1,176 +1,528 @@
-/* =========================================
-   VARIABLES (SOLO LAS QUE USA EL HOME)
-========================================= */
+
+.login-overlay {
+  pointer-events: auto;
+}
+
+.login-modal {
+  pointer-events: auto;
+}
+
+.login-modal input {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
+}
+
+.modal-password {
+  pointer-events: auto;
+}
+
+.modal-password button,
+.login-close,
+.modal-submit,
+.modal-register button {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+
 :root {
-  --blue-primary: #00489A;
-  --blue-accent: #2196F3;
-  --gray-light: #f7f9fb;
-  --gray-medium: #e0e0e0;
-  --text-dark: #1f2937;
-  --text-light: #6b7280;
-  --radius: 12px;
+  --blue-primary: #00489a;
+  --blue-accent: #168fe5;
+  --radius: 16px;
   --transition: 0.25s ease;
-  --shadow-soft: 0 4px 10px rgba(0, 0, 0, 0.05);
   --font-main: 'Poppins', 'Segoe UI', sans-serif;
 }
 
-/* =========================================
-   ESTILOS BASE NECESARIOS PARA EL HOME
-========================================= */
+html,
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--gray-light);
-  color: var(--text-dark);
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
   font-family: var(--font-main);
 }
 
-h1, h2, h3, h4 {
-  margin: 0;
-  color: var(--blue-primary);
-  font-weight: 600;
-}
-
-a {
-  color: var(--blue-accent);
-  text-decoration: none;
-  transition: var(--transition);
-}
-
-a:hover {
-  color: var(--blue-primary);
-}
-
-/* =========================================
-   HERO
-========================================= */
 .hero {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 70px 5% 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #fff;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 22, 38, 0.5),
+    rgba(8, 22, 38, 0.5)
+  );
+}
+
+.hero-text {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1450px;
+  margin: 0 auto;
   text-align: center;
-  padding: 6rem 1rem 4rem;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.hero-login-open > .hero-text {
+  filter: blur(5px);
+  transform: scale(0.99);
+  pointer-events: none;
+}
+
+.hero .eyebrow {
+  margin: 0 0 30px;
+  color: #e0eaf4;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .hero h1 {
-  font-size: 2.8rem;
-  font-weight: 700;
+  max-width: 1150px;
+  margin: 0 auto 20px;
+  color: #fff;
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  font-weight: 750;
+  line-height: 1.15;
 }
 
-.hero .sub {
-  margin-top: 0.5rem;
-  font-size: 1.4rem;
+.hero h2 {
+  margin: 0 auto 15px;
+  color: #f3f6fa;
+  font-size: clamp(1.15rem, 2vw, 1.65rem);
   font-weight: 500;
-  color: var(--text-dark);
+  line-height: 1.5;
 }
 
 .hero .desc {
-  margin-top: 1rem;
-  font-size: 1.1rem;
-  color: var(--text-light);
-  max-width: 650px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 850px;
+  margin: 0 auto;
+  color: #e1e7ef;
+  font-size: 1.05rem;
+  line-height: 1.8;
 }
 
-/* =========================================
-   TARJETAS DEL HOME
-========================================= */
+/* Tarjetas de la portada */
+
 .features {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  padding: 3rem 1rem 5rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin: 60px 0 35px;
+  text-align: left;
 }
 
 .feature-card {
-  background: #fff;
-  width: 260px;
-  padding: 2rem;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 25px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: var(--radius);
-  border: 1px solid var(--gray-medium);
-  box-shadow: var(--shadow-soft);
-  transition: var(--transition);
+  background: rgba(8, 15, 25, 0.68);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  color: #fff;
+  backdrop-filter: blur(5px);
+  transition: transform var(--transition),
+    background var(--transition);
 }
 
 .feature-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  background: rgba(8, 15, 25, 0.82);
 }
 
-.feature-card h3 {
-  margin-bottom: 0.6rem;
-  font-size: 1.25rem;
-  color: var(--blue-primary);
+.feature-card h4 {
+  margin: 0 0 14px;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .feature-card p {
   margin: 0;
-  color: var(--text-light);
+  color: #e2e8f0;
+  font-size: 0.98rem;
+  line-height: 1.6;
 }
 
-/* =========================================
-   FOOTER
-========================================= */
-footer {
+/* Botones de la portada */
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+.home-btn {
+  min-width: 180px;
+  padding: 15px 25px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--transition),
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition);
+}
+
+.home-btn:hover {
+  transform: translateY(-2px);
+}
+
+.home-btn-primary {
+  background: var(--blue-accent);
+  color: #fff;
+  border-color: transparent;
+}
+
+.home-btn-primary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.home-btn-secondary {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.home-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Modal de inicio de sesión */
+
+.login-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 13vh 20px 30px;
+  overflow-y: auto;
+  background: rgba(9, 16, 27, 0.3);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: login-overlay-appear 0.3s ease both;
+}
+
+.login-modal {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 580px;
+  padding: 34px;
+  border-radius: 28px;
+  background: #f7f7f7;
+  color: #111827;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
+  animation: login-modal-drop 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.login-modal h2 {
+  margin: 0 0 26px;
+  color: #111827;
+  font-size: 1.65rem;
+  font-weight: 750;
   text-align: center;
-  padding: 1.5rem 0;
-  background-color: var(--gray-medium);
-  color: var(--text-light);
+}
+
+.login-modal form > label {
+  display: block;
+  margin: 15px 2px 8px;
+  color: #111827;
   font-size: 0.9rem;
-  margin-top: 2rem;
+  font-weight: 700;
 }
 
-footer a {
-  color: var(--blue-primary);
-  font-weight: 500;
+.login-modal input {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  box-sizing: border-box;
+  padding: 0 17px;
+  border: 1.5px solid #c5cec9;
+  border-radius: 24px;
+  outline: none;
+  background: #e5e7e6;
+  color: #17202b;
+  font: inherit;
+  font-size: 0.9rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-footer a:hover {
-  color: var(--blue-accent);
+.login-modal input::placeholder {
+  color: #929c99;
 }
 
-/* =========================================
-   RESPONSIVE
-========================================= */
+.login-modal input:focus {
+  border-color: #078fe0;
+  box-shadow: 0 0 0 3px rgba(0, 143, 224, 0.13);
+}
 
-/* Tablet */
-@media (max-width: 1024px) {
-  .hero h1 {
-    font-size: 2.2rem;
+/* Mostrar u ocultar contraseña */
+
+.modal-password {
+  display: flex;
+  align-items: center;
+  padding-right: 12px;
+  border: 1.5px solid #c5cec9;
+  border-radius: 24px;
+  background: #e5e7e6;
+}
+
+.modal-password:focus-within {
+  border-color: #078fe0;
+  box-shadow: 0 0 0 3px rgba(0, 143, 224, 0.13);
+}
+
+.modal-password input {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.modal-password input:focus {
+  border: 0;
+  box-shadow: none;
+}
+
+.modal-password button {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  padding: 5px;
+  border: 0;
+  background: transparent;
+  color: #48515b;
+  cursor: pointer;
+}
+
+.modal-password button svg {
+  font-size: 20px;
+}
+
+/* Botón de cerrar */
+
+.login-close {
+  position: absolute;
+  top: -20px;
+  right: -14px;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 50%;
+  background: #078fe0;
+  color: #fff;
+  font-size: 27px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.login-close:hover {
+  background: #0877c5;
+  transform: rotate(90deg);
+}
+
+.login-close:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Enviar formulario */
+
+.modal-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: min(100%, 220px);
+  min-height: 44px;
+  margin: 24px auto 0;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  border-radius: 25px;
+  background: #078fe0;
+  color: #fff;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.modal-submit:hover:not(:disabled) {
+  border-color: #078fe0;
+  background: transparent;
+  color: #078fe0;
+}
+
+.modal-submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* Registro y mensajes */
+
+.modal-register {
+  margin: 12px 0 0;
+  color: #202020;
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.modal-register button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #078fe0;
+  font: inherit;
+  font-weight: 750;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.login-error {
+  margin: 12px 2px 0;
+  color: #b42318;
+  font-size: 0.88rem;
+}
+
+/* Animaciones */
+
+@keyframes login-overlay-appear {
+  from {
+    opacity: 0;
   }
-
-  .hero .sub {
-    font-size: 1.2rem;
+  to {
+    opacity: 1;
   }
+}
 
+@keyframes login-modal-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-65px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Adaptación a pantallas pequeñas */
+
+@media (max-width: 1000px) {
   .features {
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 40px;
   }
 }
 
-/* Celular */
 @media (max-width: 600px) {
   .hero {
-    padding: 3rem 1rem 2.5rem;
+    min-height: 100vh;
+    padding: 50px 20px 35px;
+  }
+
+  .hero .eyebrow {
+    margin-bottom: 20px;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
   }
 
   .hero h1 {
-    font-size: 1.9rem;
+    font-size: 2rem;
   }
 
-  .hero .sub {
+  .hero h2 {
     font-size: 1.1rem;
   }
 
   .hero .desc {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .features {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 32px 0 25px;
   }
 
   .feature-card {
-    width: 90%;
+    padding: 20px;
+  }
+
+  .home-actions {
+    flex-direction: column;
+  }
+
+  .home-btn {
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .login-overlay {
+    padding: 12vh 22px 25px;
+  }
+
+  .login-modal {
+    padding: 32px 22px 25px;
+    border-radius: 22px;
+  }
+
+  .login-close {
+    top: -15px;
+    right: -8px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-overlay,
+  .login-modal,
+  .hero-text,
+  .home-btn,
+  .feature-card {
+    animation: none;
+    transition: none;
   }
 }

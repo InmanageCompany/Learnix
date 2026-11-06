@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
-import { Button, Select, MenuItem } from '@mui/material';
+import { useCallback, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Alert, Button, Select, MenuItem } from '@mui/material';
 import axios from "axios";
 import NavBarTeacher from '../NavBar/NavBar';
 
@@ -8,20 +8,23 @@ import NavBarTeacher from '../NavBar/NavBar';
 function ModNotes() {
 
     const [seeNotes, setSeeNotes] = useState([]);
+    const [updateMessage, setUpdateMessage] = useState("");
 
     const [notes, setNotes] = useState({});
     const [comment, SetComentario] = useState({});
-    const [conceptual, SetConceptual] = useState(["En proceso", "Suficiente", "Avanzado"]);
+    const [conceptual] = useState(["En proceso", "Suficiente", "Avanzado"]);
+    const numericGrades = Array.from({ length: 10 }, (_, index) => index + 1);
 
     const token = localStorage.getItem("token")
 
     const location = useLocation();
+    const navigate = useNavigate();
     const state = location.state || {};
     const students = state.alumnos;
     const subject_id = state.subject_id;
     const period_id = state.period_id;
 
-    const List = async () => {
+    const List = useCallback(async () => {
         try {
         let ar = [] 
         for (const s of students) {
@@ -44,7 +47,7 @@ function ModNotes() {
             else
                 alert(`Error: ${error.message}`);
         }
-    };
+    }, [students, subject_id, period_id, token]);
 
     const UpdateGrades = async (grade_id) => {
         try {
@@ -59,8 +62,9 @@ function ModNotes() {
                 }
             );
 
-            alert(response.data.message);
-
+            setUpdateMessage(response.data.message || "La nota se modificó correctamente.");
+            setNotes((current) => ({ ...current, [grade_id]: "" }));
+            SetComentario((current) => ({ ...current, [grade_id]: "" }));
             await List();
         } catch (error) {
             if (error.response)
@@ -76,13 +80,45 @@ function ModNotes() {
 
     useEffect(() => {
         List();
-    }, []);
+    }, [List]);
     
     return (
         <>
             <NavBarTeacher />
             <div className="teacher-page">
                 <h1>Modficar notas de los alumnos</h1>
+
+                {updateMessage && (
+                    <Alert
+                        severity="success"
+                        sx={{
+                            mb: 2,
+                            alignItems: "center",
+                            textAlign: "left",
+                            "& .MuiAlert-message": { flex: 1 }
+                        }}
+                        action={
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                                <Button
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => setUpdateMessage("")}
+                                >
+                                    Seguir editando
+                                </Button>
+                                <Button
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => navigate(-1)}
+                                >
+                                    Volver a alumnos
+                                </Button>
+                            </div>
+                        }
+                    >
+                        {updateMessage}
+                    </Alert>
+                )}
 
                 {seeNotes.length === 0 ? (
                     <h2> No hay notas cargadas para modficar </h2>
@@ -126,12 +162,24 @@ function ModNotes() {
                                             }
                                         </Select>
                                     ) : (
-                                        <input type="text" placeholder="Numero" onChange={(e) =>
-                                            setNotes({
-                                                ...notes,
-                                                [n.id]: e.target.value
-                                            })
-                                        } />
+                                        <Select
+                                            value={notes[n.id] ?? ""}
+                                            displayEmpty
+                                            inputProps={{ "aria-label": `Nueva nota de ${n.report_card.student.name}` }}
+                                            onChange={(e) =>
+                                                setNotes({
+                                                    ...notes,
+                                                    [n.id]: e.target.value
+                                                })
+                                            }
+                                        >
+                                            <MenuItem value="" disabled>Elegir nota</MenuItem>
+                                            {numericGrades.map((grade) => (
+                                                <MenuItem key={grade} value={String(grade)}>
+                                                    {grade}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
                                     )}
                                 </th>
                                 <th key={n.id}>

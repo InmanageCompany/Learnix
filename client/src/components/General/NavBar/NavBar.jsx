@@ -8,15 +8,6 @@ function NavBar() {
         <Button color="inherit" component={Link} to="/" sx={{ textTransform: "none", fontWeight: 500 }}>
           Home
         </Button>
-        <Button color="inherit" component={Link} to="/register" sx={{ textTransform: "none", fontWeight: 500 }}>
-          Registrarse
-        </Button>
-        <Button color="inherit" component={Link} to="/login" sx={{ textTransform: "none", fontWeight: 500 }}>
-          Iniciar sesión
-        </Button>
-        <Button color="inherit" component={Link} to="/student/login" sx={{ textTransform: "none", fontWeight: 500 }}>
-          Estudiantes
-        </Button>
       </Toolbar>
     </AppBar>
   );
